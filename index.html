@@ -1263,6 +1263,18 @@
         });
         switcher.appendChild(switchSelect);
         headerRow.appendChild(switcher);
+        // Ny aktivitetsknapp
+const addButton = document.createElement('button');
+addButton.textContent = '➕ Lägg till aktivitet';
+addButton.style.marginLeft = 'auto';
+addButton.style.padding = '0.6em 1.2em';
+addButton.style.border = 'none';
+addButton.style.background = 'var(--primary-color)';
+addButton.style.color = '#fff';
+addButton.style.borderRadius = '4px';
+addButton.style.cursor = 'pointer';
+addButton.onclick = () => showAddEventPopup();
+headerRow.appendChild(addButton);
         container.appendChild(headerRow);
 
         // Add week filter select
