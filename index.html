@@ -578,6 +578,62 @@
         display: block;
     }
 }
+@media (max-width: 600px) {
+  nav {
+    flex-direction: column;
+  }
+
+  nav button {
+    width: 100%;
+    margin-bottom: 0.5em;
+  }
+
+  .planner-grid,
+  .calendar-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .planner-week {
+    min-width: 260px;
+  }
+
+  .session {
+    padding: 0.5em;
+  }
+
+  textarea {
+    width: 100%;
+    font-size: 1em;
+  }
+
+  .completion-row {
+    flex-direction: column;
+    gap: 0.2em;
+  }
+
+  .progress {
+    align-items: center;
+  }
+
+  .calendar-table td,
+  .calendar-table th {
+    min-width: 100px;
+  }
+
+  .person-switcher select,
+  .week-filter select,
+  .calendar-person-filter select {
+    width: 100%;
+  }
+
+  .home-buttons button {
+    width: 100%;
+    margin-bottom: 0.5em;
+  }
+}
+
     </style>
 </head>
 <body>
@@ -2181,5 +2237,6 @@
         showPage('home');
     });
     </script>
+<button class="back-to-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">⬆️ Till toppen</button>
 </body>
 </html>
