@@ -2124,6 +2124,77 @@ headerRow.appendChild(addButton);
         // Show the home page by default
         showPage('home');
     });
+
+        function showAddEventPopup() {
+    const popup = document.getElementById('add-event-popup');
+    popup.style.display = 'flex';
+    // Skapa checkboxar för deltagare
+    const personsDiv = document.getElementById('new-event-persons');
+    personsDiv.innerHTML = '';
+    persons.forEach(p => {
+        const label = document.createElement('label');
+        label.style.display = 'inline-flex';
+        label.style.alignItems = 'center';
+        label.style.marginRight = '10px';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.value = p;
+        cb.checked = true; // alla deltagare valda som standard
+        label.appendChild(cb);
+        label.appendChild(document.createTextNode(' ' + p));
+        personsDiv.appendChild(label);
+    });
+}
+
+function hideAddEventPopup() {
+    document.getElementById('add-event-popup').style.display = 'none';
+}
+
+function addNewEvent() {
+    const date = document.getElementById('new-event-date').value;
+    const time = document.getElementById('new-event-time').value;
+    const name = document.getElementById('new-event-name').value;
+    const desc = document.getElementById('new-event-desc').value;
+    const personCheckboxes = document.querySelectorAll('#new-event-persons input[type="checkbox"]');
+    const selectedPersons = Array.from(personCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+
+    if (!date || !time || !name) {
+        alert('Fyll i datum, tid och namn på aktiviteten.');
+        return;
+    }
+
+    const datetimeStr = `${date} ${time}`;
+    const dateObj = new Date(`${date}T${time}`);
+
+    const newEvent = {
+        name: name,
+        description: desc,
+        datetime: datetimeStr,
+        dateObj: dateObj,
+        organizedBy: 'self',
+        persons: selectedPersons
+    };
+
+    const weekNum = getISOWeekNumber(dateObj);
+    let weekObj = schedule.find(w => w.week === weekNum);
+    if (!weekObj) {
+        weekObj = {
+            week: weekNum,
+            startDate: dateObj.toISOString().slice(0,10),
+            sessions: []
+        };
+        schedule.push(weekObj);
+        schedule.sort((a,b) => a.week - b.week);
+    }
+    weekObj.sessions.push(newEvent);
+    weekObj.sessions.sort((a,b) => a.dateObj - b.dateObj);
+
+    hideAddEventPopup();
+    renderSchedule();
+    renderCalendar();
+    renderProgress();
+}
+
     </script>
     <div id="add-event-popup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
     <div style="background:#fff; padding:20px; border-radius:8px; width:90%; max-width:400px;">
