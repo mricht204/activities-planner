@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -787,8 +788,8 @@
         const newDesc = prompt('Enter description:', currentDesc);
         if (newDesc === null) return;
         // Update the event properties
-        ev.datetime = ${newDate} ${newTime};
-        ev.dateObj = new Date(${newDate}T${newTime});
+        ev.datetime = `${newDate} ${newTime}`;
+        ev.dateObj = new Date(`${newDate}T${newTime}`);
         ev.name = newName;
         ev.description = newDesc;
         // Re-sort sessions by date to maintain order
@@ -828,11 +829,11 @@
             const suffix = (d % 10 === 1 && d !== 11) ? 'st' :
                            (d % 10 === 2 && d !== 12) ? 'nd' :
                            (d % 10 === 3 && d !== 13) ? 'rd' : 'th';
-            const dayWithSuffix = ${d}${suffix};
+            const dayWithSuffix = `${d}${suffix}`;
             // Format hours and minutes with leading zeros
             const hh = String(dateObj.getHours()).padStart(2, '0');
             const mm = String(dateObj.getMinutes()).padStart(2, '0');
-            return ${dayName} ${monthName} ${dayWithSuffix} ${hh}:${mm};
+            return `${dayName} ${monthName} ${dayWithSuffix} ${hh}:${mm}`;
         } catch (e) {
             // If parsing fails for any reason, return the original string
             return dateTimeStr;
@@ -957,7 +958,7 @@
         const monthName = months[dateObj.getMonth()];
         const d = dateObj.getDate();
         const suffix = (d % 10 === 1 && d !== 11) ? 'st' : (d % 10 === 2 && d !== 12) ? 'nd' : (d % 10 === 3 && d !== 13) ? 'rd' : 'th';
-        return ${dayName} ${monthName} ${d}${suffix};
+        return `${dayName} ${monthName} ${d}${suffix}`;
     }
 
     // Determine the ISO week number and formatted string for today's date. These values
@@ -1004,7 +1005,7 @@
             const day = String(sessDate.getDate()).padStart(2, '0');
             const hour = String(sessDate.getHours()).padStart(2, '0');
             const minute = String(sessDate.getMinutes()).padStart(2, '0');
-            const dateTime = ${year}-${month}-${day} ${hour}:${minute};
+            const dateTime = `${year}-${month}-${day} ${hour}:${minute}`;
             sessions.push({
                 name: sessionTemplates[j].name,
                 description: sessionTemplates[j].description,
@@ -1064,7 +1065,7 @@
             const day = String(occDate.getDate()).padStart(2, '0');
             const hour = String(occDate.getHours()).padStart(2, '0');
             const minute = String(occDate.getMinutes()).padStart(2, '0');
-            const dateTimeStr = ${year}-${month}-${day} ${hour}:${minute};
+            const dateTimeStr = `${year}-${month}-${day} ${hour}:${minute}`;
             // Push the activity into the week's sessions
             weekObj.sessions.push({
                 name: activity.name,
@@ -1153,7 +1154,7 @@
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
-            const dateTimeStr = ${year}-${month}-${day} 12:00;
+            const dateTimeStr = `${year}-${month}-${day} 12:00`;
             foodEvents.push({
                 name: 'School food',
                 description: def.menus[dayKey],
@@ -1170,7 +1171,7 @@
         schedule.forEach(week => {
             notes[week.week] = {};
             week.sessions.forEach(session => {
-                const key = week${week.week}_${session.name};
+                const key = `week${week.week}_${session.name}`;
                 notes[week.week][session.name] = localStorage.getItem(key) || "";
             });
         });
@@ -1179,7 +1180,7 @@
 
     // Save a note to localStorage
     function saveNote(week, sessionName, value) {
-        const key = week${week}_${sessionName};
+        const key = `week${week}_${sessionName}`;
         localStorage.setItem(key, value);
     }
 
@@ -1191,7 +1192,7 @@
             weekObj.sessions.forEach(session => {
                 completions[weekObj.week][session.name] = {};
                 persons.forEach(person => {
-                    const key = week${weekObj.week}_${session.name}_${person}_completed;
+                    const key = `week${weekObj.week}_${session.name}_${person}_completed`;
                     completions[weekObj.week][session.name][person] = localStorage.getItem(key) === 'true';
                 });
             });
@@ -1201,7 +1202,7 @@
 
     // Save completion state for a specific person in a session
     function saveCompletion(week, sessionName, person, value) {
-        const key = week${week}_${sessionName}_${person}_completed;
+        const key = `week${week}_${sessionName}_${person}_completed`;
         localStorage.setItem(key, value);
     }
 
@@ -1226,7 +1227,7 @@
         // Always use the secondary colour (red) for the schedule heading, regardless of the selected person
         heading.style.color = getComputedStyle(document.documentElement).getPropertyValue('--secondary-color');
         if (filterPerson) {
-            heading.textContent = Schedule - ${filterPerson};
+            heading.textContent = `Schedule - ${filterPerson}`;
         } else {
             heading.textContent = 'Schedule';
         }
@@ -1281,7 +1282,7 @@
         schedule.forEach(w => {
             const opt = document.createElement('option');
             opt.value = String(w.week);
-            opt.textContent = Week ${w.week};
+            opt.textContent = `Week ${w.week}`;
             weekSelect.appendChild(opt);
         });
         weekSelect.addEventListener('change', (e) => {
@@ -1303,7 +1304,7 @@
             // is shown prominently in the banner above the schedule. The week header now
             // contains only the ISO week number, e.g., "Week 32".
             const weekHeader = document.createElement('h2');
-            weekHeader.textContent = Week ${weekObj.week};
+            weekHeader.textContent = `Week ${weekObj.week}`;
             weekDiv.appendChild(weekHeader);
             // Compute and render weekly progress bar before listing sessions. Use selected person if available,
             // otherwise aggregate across all persons. This ensures the progress is visible at the top of the week card.
@@ -1325,7 +1326,7 @@
                         }
                     });
                     barColor = personColors[filterPerson];
-                    labelText = ${completedWorkouts}/${totalWorkouts} workouts completed;
+                    labelText = `${completedWorkouts}/${totalWorkouts} workouts completed`;
                 } else {
                     persons.forEach(person => {
                         weekObj.sessions.forEach(sess => {
@@ -1341,7 +1342,7 @@
                         });
                     });
                     barColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim() || '#4285F4';
-                    labelText = ${completedWorkouts}/${totalWorkouts} workouts completed;
+                    labelText = `${completedWorkouts}/${totalWorkouts} workouts completed`;
                 }
                 const progressWrapper = document.createElement('div');
                 progressWrapper.style.marginTop = '0.5em';
@@ -1360,7 +1361,7 @@
                 progBar.style.background = barColor;
                 progBar.style.height = '8px';
                     progBar.style.borderRadius = '4px';
-                progBar.style.width = totalWorkouts > 0 ? ${(completedWorkouts / totalWorkouts) * 100}% : '0%';
+                progBar.style.width = totalWorkouts > 0 ? `${(completedWorkouts / totalWorkouts) * 100}%` : '0%';
                 progBarContainer.appendChild(progBar);
                 progressWrapper.appendChild(progBarContainer);
                 weekDiv.appendChild(progressWrapper);
@@ -1382,7 +1383,7 @@
                 organiserIcon.textContent = session.organizedBy === 'club' ? '🏢' : '🏠';
                 organiserIcon.style.marginLeft = '0.4em';
                 organiserIcon.style.fontSize = '16px';
-                sHeader.textContent = ${formatted} - ${session.name};
+                sHeader.textContent = `${formatted} - ${session.name}`;
                 // Append icon after the text
                 sHeader.appendChild(organiserIcon);
                 headerWrapper.appendChild(sHeader);
@@ -1408,7 +1409,7 @@
                     label.appendChild(cb);
                     label.appendChild(span);
                     // Style based on state
-                    label.style.border = 1px solid ${color}40;
+                    label.style.border = `1px solid ${color}40`;
                     if (cb.checked) {
                         label.style.background = color;
                         label.style.color = '#fff';
@@ -1513,7 +1514,7 @@
         // Month title
         const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
         const title = document.createElement('h2');
-        title.textContent = ${monthNames[calendarMonth]} ${calendarYear};
+        title.textContent = `${monthNames[calendarMonth]} ${calendarYear}`;
         // Build a names row instead of a dropdown filter. This row allows quick switching
         // between viewing all events and viewing a specific person's events. Each name
         // acts as a link; clicking sets calendarPerson and refreshes the views.
@@ -1763,7 +1764,7 @@
         heading.style.fontSize = '22px';
         heading.style.fontWeight = '500';
         heading.style.color = getComputedStyle(document.documentElement).getPropertyValue('--secondary-color').trim();
-        heading.textContent = filterPerson ? Planner - ${filterPerson} : 'Planner';
+        heading.textContent = filterPerson ? `Planner - ${filterPerson}` : 'Planner';
         headerRow.appendChild(heading);
         // Person switcher
         const switcher = document.createElement('div');
@@ -1842,7 +1843,7 @@
             const weekStart = getDateOfISOWeek(weekNum, plannerYear);
             const weekEnd = new Date(weekStart);
             weekEnd.setDate(weekStart.getDate() + 6);
-            const rangeText = ${weekStart.getDate()} ${monthAbbrev[weekStart.getMonth()]} - ${weekEnd.getDate()} ${monthAbbrev[weekEnd.getMonth()]};
+            const rangeText = `${weekStart.getDate()} ${monthAbbrev[weekStart.getMonth()]} - ${weekEnd.getDate()} ${monthAbbrev[weekEnd.getMonth()]}`;
             const weekHeader = document.createElement('h3');
             weekHeader.textContent = rangeText;
             weekDiv.appendChild(weekHeader);
@@ -1868,13 +1869,13 @@
                 const dateHeader = document.createElement('div');
                 dateHeader.className = 'event-date';
                 const d = ev.dateObj;
-                dateHeader.textContent = ${dayShort[d.getDay()]} ${d.getDate()} ${monthAbbrev[d.getMonth()]};
+                dateHeader.textContent = `${dayShort[d.getDay()]} ${d.getDate()} ${monthAbbrev[d.getMonth()]}`;
                 eventDiv.appendChild(dateHeader);
                 // Name/time line
                 const nameLine = document.createElement('div');
                 nameLine.className = 'event-name';
                 const timePart = ev.datetime.split(' ')[1];
-                nameLine.textContent = ${timePart} - ${ev.name};
+                nameLine.textContent = `${timePart} - ${ev.name}`;
                 // Add completion symbol for workouts
                 if (ev.name && ev.name.startsWith('Workout')) {
                     const status = document.createElement('span');
@@ -1904,7 +1905,7 @@
                 prog.style.fontWeight = '600';
                 let progColor;
                 if (filterPerson) {
-                    prog.textContent = ${completedWorkouts}/${totalWorkouts} workouts done;
+                    prog.textContent = `${completedWorkouts}/${totalWorkouts} workouts done`;
                     progColor = personColors[filterPerson];
                 } else {
                     // Aggregate counts across persons
@@ -1920,7 +1921,7 @@
                             }
                         });
                     });
-                    prog.textContent = ${completedAll}/${totalAll} workouts done;
+                    prog.textContent = `${completedAll}/${totalAll} workouts done`;
                     progColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim() || '#4285F4';
                 }
                 prog.style.color = progColor;
@@ -1939,7 +1940,7 @@
             const personRow = document.createElement('div');
             personRow.className = 'person-progress-row';
             const label = document.createElement('span');
-            label.textContent = ${person}: ${completed}/${totalCount} workouts done;
+            label.textContent = `${person}: ${completed}/${totalCount} workouts done`;
             label.style.fontSize = '14px';
             label.style.fontWeight = '600';
             label.style.color = personColors[person];
@@ -1955,7 +1956,7 @@
             const bar = document.createElement('div');
             bar.style.background = personColors[person];
             bar.style.height = '8px';
-            bar.style.width = totalCount > 0 ? ${(completed/totalCount)*100}% : '0%';
+            bar.style.width = totalCount > 0 ? `${(completed/totalCount)*100}%` : '0%';
             bar.style.borderRadius = '4px';
             barContainer.appendChild(bar);
             personRow.appendChild(barContainer);
@@ -1969,7 +1970,7 @@
             weekRow.className = 'week';
             // Week title (ISO week number)
             const weekTitle = document.createElement('h3');
-            weekTitle.textContent = Week ${weekObj.week};
+            weekTitle.textContent = `Week ${weekObj.week}`;
             weekRow.appendChild(weekTitle);
             // Iterate over each person
             persons.forEach(person => {
@@ -1988,7 +1989,7 @@
                 personRow.className = 'person-progress-row';
                 // Label for person progress
                 const label = document.createElement('span');
-                label.textContent = ${person}: ${completedCount}/${totalCount} workouts done;
+                label.textContent = `${person}: ${completedCount}/${totalCount} workouts done`;
                 label.style.fontSize = '14px';
                 label.style.fontWeight = '600';
                 label.style.color = personColors[person];
@@ -2005,7 +2006,7 @@
                 bar.style.background = personColors[person];
                 bar.style.height = '8px';
                 bar.style.borderRadius = '4px';
-                bar.style.width = totalCount > 0 ? ${(completedCount/totalCount)*100}% : '0%';
+                bar.style.width = totalCount > 0 ? `${(completedCount/totalCount)*100}%` : '0%';
                 barContainer.appendChild(bar);
                 personRow.appendChild(barContainer);
                 weekRow.appendChild(personRow);
@@ -2013,7 +2014,7 @@
             // Aggregate notes summary (across persons) for the week
             const notesCount = weekObj.sessions.filter(s => (notes[weekObj.week][s.name] || '').trim() !== '').length;
             const notesInfo = document.createElement('p');
-            notesInfo.textContent = Notes recorded: ${notesCount}/${weekObj.sessions.length};
+            notesInfo.textContent = `Notes recorded: ${notesCount}/${weekObj.sessions.length}`;
             notesInfo.style.fontSize = '13px';
             notesInfo.style.margin = '0';
             notesInfo.style.color = '#666';
