@@ -1,247 +1,2185 @@
-<!DOCTYPE html>
-<html lang="sv">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Familjeplanerare</title>
-  <style>
-    :root {
-      --primary-color: #3f51b5;
-      --secondary-color: #f1f1f1;
-      --border-color: #ccc;
-    }
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Activities 2025</title>
+    <!-- Import Roboto from Google Fonts to mirror the clean typography of Google's homepage -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* General typography and colors */
+        /* Root CSS variables for a harmonious, nature‑inspired palette.
+           These colours are drawn from 2025 colour trends emphasising warm, earthy tones with
+           subtle contrast【661033415015908†L83-L87】. */
+        :root {
+            /* Google inspired palette: white background, dark text and four primary accent colours.
+               These colours echo the familiar Google logo hues without using the logo itself. */
+            --background-color: #FFFFFF;
+            --text-color: #202124;
+            --primary-color: #4285F4;   /* blue */
+            --secondary-color: #DB4437; /* red */
+            --accent-color: #F4B400;    /* yellow */
+            --success-color: #0F9D58;   /* green */
+            --border-color: #E8EAED;    /* light grey for card borders */
+        }
+        body {
+            background: var(--background-color);
+            /* Use Roboto for all text to evoke Google's minimalist look */
+            font-family: 'Roboto', Arial, sans-serif;
+            font-size: 15px;
+            color: var(--text-color);
+            margin: 0;
+            padding: 1em;
+        }
+        h1 {
+            font-family: 'Roboto', Arial, sans-serif;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 1.5em;
+            font-weight: 500;
+            /* Use the base text colour for the main title instead of primary blue */
+            color: var(--text-color);
+        }
+        /* Navigation styling inspired by google.com: simple links with underline on active */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1.5em;
+            margin-bottom: 2em;
+            padding-bottom: 0.5em;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background: #fff;
-      color: #333;
-    }
+        /* Informational date banner shown on the schedule page. Make it stand out by increasing size and using dark text */
+        #today-info {
+            text-align: center;
+            margin-bottom: 1em;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        nav button {
+            padding: 0.5em 0;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 15px;
+            color: #5f6368; /* Google grey for unselected links */
+            font-weight: 500;
+            position: relative;
+        }
+        nav button:hover {
+            color: var(--primary-color);
+        }
+        nav button.active {
+            color: var(--primary-color);
+        }
+        nav button.active::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -3px;
+            height: 2px;
+            background: var(--primary-color);
+        }
 
-    header, nav {
-      background: var(--primary-color);
-      color: #fff;
-      padding: 1em;
-      text-align: center;
-    }
+        /* Week filter styling */
+        .week-filter {
+            margin-bottom: 1em;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            font-size: 14px;
+            color: var(--text-color);
+        }
 
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 1em;
-      flex-wrap: wrap;
-    }
+        /* Person switcher styling: used on the schedule page to select a different person */
+        .person-switcher {
+            margin-bottom: 1em;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        .person-switcher select {
+            padding: 0.4em 0.6em;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            color: var(--text-color);
+        }
+        .week-filter select {
+            padding: 0.4em 0.6em;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            color: var(--text-color);
+        }
 
-    nav button {
-      background: #fff;
-      color: var(--primary-color);
-      border: none;
-      padding: 0.5em 1em;
-      font-weight: bold;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+        /* Schedule header row to align heading and switch user dropdown */
+        .schedule-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 0.5em;
+            gap: 0.5em;
+        }
 
-    main {
-      max-width: 720px;
-      margin: auto;
-      padding: 1em;
-    }
+        /* Home container styling: full-screen hero with subtle overlay for readability */
+        #home-container {
+            display: none;
+            position: relative;
+            margin-bottom: 2em;
+            min-height: 80vh;
+            /* Remove the hero background image for a clean, Google-like homepage */
+            background: var(--background-color);
+            overflow: hidden;
+        }
+        /* Remove the overlay when no image is present */
+        #home-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: transparent;
+            z-index: 0;
+        }
+        /* Wrapper for textual content on home page */
+        #home-container .content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 4em 1em;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--text-color);
+        }
+        #home-container .content h2 {
+            font-family: 'Roboto', Arial, sans-serif;
+            font-size: 32px;
+            margin-top: 0;
+            margin-bottom: 0.5em;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        #home-container .content p {
+            font-size: 16px;
+            color: #5f6368;
+            margin-bottom: 1.5em;
+            line-height: 1.5;
+        }
+        #home-container .home-buttons button {
+            padding: 0.6em 1.2em;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin: 0.3em;
+            cursor: pointer;
+            background: #f8f9fa;
+            color: var(--text-color);
+            font-size: 14px;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        #home-container .home-buttons button:hover {
+            background: #f1f3f4;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
 
+        /* Visual illustration on checkbox selection */
+        .person-checkbox input:checked + span::after {
+            content: '✔';
+            margin-left: 0.3em;
+            font-size: 14px;
+        }
+        /* Week card styling */
+        .week {
+            background: #FFFFFF;
+            margin-bottom: 1.5em;
+            border-radius: 8px;
+            padding: 1em;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(60,64,67,0.1);
+        }
+        .week h2 {
+            margin-top: 0;
+            margin-bottom: 0.5em;
+            font-size: 20px;
+            font-family: 'Roboto', Arial, sans-serif;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        /* Session styling */
+        .session {
+            border-top: 1px solid #eee;
+            padding-top: 1em;
+            margin-top: 1em;
+        }
+        .session:first-child {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
+        .session h3 {
+            margin: 0;
+            font-size: 16px;
+            font-family: 'Roboto', Arial, sans-serif;
+            font-weight: 500;
+            color: var(--text-color);
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .session p {
+            margin: 0.5em 0 0.5em 0;
+            font-size: 14px;
+            line-height: 1.5em;
+            color: #5f6368;
+        }
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0.6em;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            resize: vertical;
+            min-height: 60px;
+            background: #f8f9fa;
+        }
+
+        /* Row of checkboxes representing each person for a session */
+        .completion-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5em;
+            margin: 0.5em 0;
+        }
+        /* Styling for the person checkbox container */
+        .person-checkbox {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            padding: 0.3em 0.6em;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            transition: background 0.2s;
+        }
+        .person-checkbox input {
+            margin: 0;
+        }
+        /* Date/time text below the session name */
+        .session-date {
+            font-size: 13px;
+            color: #5f6368;
+            margin-top: 0.2em;
+            display: block;
+        }
+        /* Row for displaying per-person progress on the progress view */
+        .person-progress-row {
+            margin-top: 0.5em;
+        }
+        /* Container for a progress bar per person */
+        .person-progress-bar-container {
+            width: 100%;
+        }
+
+        /* ---- Calendar Styles ---- */
+        /* Container for the calendar page. We reuse the same card-like layout used for weeks */
+        #calendar-container {
+            background: #FFFFFF;
+            padding: 1em;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(60,64,67,0.1);
+        }
+        /* Header area for month navigation and person filter */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1em;
+        }
+        /* Navigation arrows for previous/next month */
+        .month-nav button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--primary-color);
+            padding: 0.2em 0.4em;
+        }
+        .month-nav button:hover {
+            color: var(--secondary-color);
+        }
+        /* Month title styling */
+        .calendar-header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        /* Person filter styling within the calendar */
+        .calendar-person-filter {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+        }
+        .calendar-person-filter select {
+            padding: 0.3em 0.6em;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: #fff;
+            color: var(--text-color);
+        }
+
+        /* Names row next to month header for quick navigation to personal planners */
+        .calendar-names {
+            display: flex;
+            align-items: center;
+            gap: 0.8em;
+            flex-wrap: wrap;
+            margin-top: 0.5em;
+        }
+        .calendar-names button {
+            background: none;
+            border: none;
+            padding: 0.2em 0.4em;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-color);
+            text-decoration: underline;
+        }
+        .calendar-names button.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        /* Event list items */
+        /* List-based calendar event styles (fallback). These are largely unused in the grid
+         * view but remain for reference if list view is re-enabled. */
+        .calendar-event {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            margin: 0.3em 0;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        .calendar-event .icon {
+            margin-left: 0.4em;
+        }
+        .dots {
+            display: flex;
+            gap: 0.2em;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Grid view calendar styles */
+        .calendar-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .calendar-table th, .calendar-table td {
+            border: 1px solid var(--border-color);
+            vertical-align: top;
+            padding: 0.4em;
+            height: 96px;
+        }
+        .calendar-table th {
+            background: #f5f5f5;
+            text-align: center;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 13px;
+        }
+        .calendar-table .date-number {
+            font-weight: 600;
+            margin-bottom: 0.2em;
+            font-size: 13px;
+        }
+        .calendar-table .other-month .date-number {
+            color: #999;
+        }
+        .calendar-table .events {
+            display: block;
+            font-size: 11px;
+        }
+        .calendar-table .event-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.2em;
+        }
+        .calendar-table .event-item:last-child {
+            margin-bottom: 0;
+        }
+        .calendar-table .event-item .time {
+            font-weight: 600;
+            margin-right: 0.25em;
+        }
+        .calendar-table .event-item .dots {
+            display: flex;
+            gap: 0.1em;
+            margin-right: 0.25em;
+        }
+        .calendar-table .event-item .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .calendar-table .event-item .icon {
+            margin-left: 0.2em;
+        }
+
+        /* Planner view grid styles (vertical columns per week). */
+        .planner-grid {
+            display: flex;
+            gap: 1em;
+            overflow-x: auto;
+            margin-top: 1em;
+        }
+        .planner-week {
+            flex: 1;
+            min-width: 200px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.6em;
+            background: #fafafa;
+        }
+        .planner-week h3 {
+            margin-top: 0;
+            margin-bottom: 0.6em;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        .planner-event {
+            margin-bottom: 0.5em;
+            padding: 0.4em;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: #ffffff;
+            cursor: pointer;
+        }
+        .planner-event:hover {
+            background: #f0f0f0;
+        }
+        .planner-event .event-date {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 0.2em;
+        }
+        .planner-event .event-name {
+            font-size: 14px;
+        }
+
+        /* Responsive adjustments for tablets like iPad */
+        @media (min-width: 600px) {
+            body {
+                font-size: 16px;
+            }
+            nav button {
+                font-size: 16px;
+                padding: 0.7em 1.2em;
+            }
+            /* Increase headings slightly for better readability */
+            .week h2 {
+                font-size: 22px;
+            }
+            .session h3 {
+                font-size: 18px;
+            }
+            /* Centre and constrain main content width on larger screens */
+            #home-container,
+            #schedule-container,
+            #progress-container {
+                max-width: 720px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        @media (max-width: 600px) {
+    /* Gör planner-kolumner bredare för bättre läsbarhet */
     .planner-week {
-      min-width: 300px;
-      margin-bottom: 2em;
+        min-width: 260px;
     }
 
-    .session {
-      background: var(--secondary-color);
-      border: 1px solid var(--border-color);
-      padding: 1em;
-      margin-top: 1em;
-      border-radius: 5px;
+    /* Dropdowns i planner och schema: gör full bredd */
+    .person-switcher select,
+    .week-filter select,
+    .calendar-person-filter select {
+        width: 100%;
     }
 
-    .calendar-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .calendar-table th, .calendar-table td {
-      border: 1px solid var(--border-color);
-      padding: 0.5em;
-      text-align: center;
-    }
-
-    .progress-bar {
-      height: 20px;
-      background: var(--secondary-color);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-top: 0.5em;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: var(--primary-color);
-    }
-
-    .back-to-top {
-      position: fixed;
-      bottom: 1em;
-      right: 1em;
-      padding: 0.5em 1em;
-      background: var(--primary-color);
-      color: #fff;
-      font-weight: bold;
-      border-radius: 50px;
-      display: none;
-      z-index: 999;
-    }
-
-    @media (max-width: 600px) {
-      nav {
-        flex-direction: column;
-      }
-
-      nav button {
+    /* Knappar på hemsidan: bättre spacing och klickzon */
+    .home-buttons button {
         width: 100%;
         margin-bottom: 0.5em;
-      }
+    }
 
-      .calendar-table {
+    /* Tillåt horisontell scroll på kalendern */
+    .calendar-table {
         display: block;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
-      }
-
-      .calendar-table td,
-      .calendar-table th {
-        min-width: 100px;
-      }
-
-      .planner-week {
-        min-width: 260px;
-      }
-
-      .session {
-        padding: 0.5em;
-      }
-
-      textarea {
-        width: 100%;
-        font-size: 1em;
-      }
-
-      .progress {
-        align-items: center;
-      }
     }
-  </style>
+
+    /* Navigation: stapla vertikalt och gör knappar större */
+    nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav button {
+        width: 100%;
+        padding: 1em;
+        text-align: center;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Sessions och checkboxar: bättre spacing */
+    .session {
+        padding: 0.5em 0;
+    }
+
+    .completion-row {
+        flex-direction: column;
+        gap: 0.2em;
+    }
+
+    /* Textareas: lite större för bättre skrivkomfort */
+    textarea {
+        font-size: 15px;
+        padding: 0.8em;
+    }
+
+    /* "Till toppen"-knapp (om du väljer att lägga till den) */
+    .back-to-top {
+        position: fixed;
+        bottom: 1em;
+        right: 1em;
+        padding: 0.5em 1em;
+        border-radius: 50px;
+        background: var(--primary-color);
+        color: #fff;
+        font-weight: bold;
+        z-index: 1000;
+        display: block;
+    }
+}
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Familjens Planerare</h1>
-  </header>
-
-  <nav>
-    <button onclick="showView('schedule')">Schema</button>
-    <button onclick="showView('planner')">Planner</button>
-    <button onclick="showView('progress')">Progress</button>
-  </nav>
-
-  <main>
-    <div id="scheduleView"></div>
-    <div id="plannerView" style="display:none;"></div>
-    <div id="progressView" style="display:none;"></div>
-  </main>
-
-  <button class="back-to-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">⬆️ Till toppen</button>
-
-  <script>
-    const people = ["Moa", "Elias"];
-    const weeks = Array.from({ length: 8 }, (_, i) => i + 1);
-    const recurring = [
-      { day: "Måndag", activity: "Ridning - Moa" },
-      { day: "Onsdag", activity: "Piano - Elias" },
-      { day: "Fredag", activity: "Simning - Moa & Elias" }
+    <h1 id="main-title">Activities 2025</h1>
+    <nav id="nav">
+        <button id="nav-home" onclick="showPage('home')">Home</button>
+        <!-- Display the Schedule nav button so users can always access the full schedule.  -->
+        <!-- Renamed Schedule to Planner. Progress button is removed (progress will be shown inside the planner) -->
+        <button id="nav-schedule" onclick="showGeneralSchedule()">Planner</button>
+        <button id="nav-progress" onclick="showPage('progress')" style="display:none;">Progress</button>
+        <!-- The calendar view is now accessed from the home page via a dedicated button. The calendar nav button is hidden -->
+        <button id="nav-calendar" onclick="showPage('calendar')" style="display:none;">Calendar</button>
+    </nav>
+    <!-- Welcome / home container -->
+    <div id="home-container">
+        <div class="content">
+            <h2>Welcome family Richt</h2>
+            <!-- Provide a brief, inviting introduction without repeating the programme name on the home screen -->
+            <p>Our training programme blends swimming, basketball, horse riding and piano practice to keep everyone challenged and inspired. Scroll through the schedule or track your progress using the buttons below.</p>
+            <div class="home-buttons">
+                <!-- Person-specific schedule buttons: clicking one sets the filter and navigates to the schedule page -->
+                <button onclick="showPersonSchedule('Marcus')">Go Marcus</button>
+                <button onclick="showPersonSchedule('Lily')">Go Lily</button>
+                <button onclick="showPersonSchedule('Ludvig')">Go Ludvig</button>
+                <button onclick="showPersonSchedule('Melissa')">Go Melissa</button>
+                <!-- Removed the dedicated calendar button; the calendar is now shown directly on the home page -->
+            </div>
+        </div>
+    </div>
+    <!-- An informational banner that displays today's date when viewing the schedule. It is hidden on other pages. -->
+    <div id="today-info" style="display:none;"></div>
+    <!-- Schedule and progress containers -->
+    <div id="schedule-container" style="display:none;"></div>
+    <div id="progress-container" style="display:none;"></div>
+    <!-- Calendar container: holds the month view of all activities. Initially hidden -->
+    <div id="calendar-container" style="display:none;">
+        <!-- Welcome text integrated into the calendar view -->
+        <div id="calendar-welcome" class="content" style="margin-bottom: 1em;">
+            <h2>Welcome family Richt</h2>
+            <p>Our training programme blends swimming, basketball, horse riding and piano practice to keep everyone challenged and inspired. Scroll through the calendar or select a name above to view individual planners.</p>
+        </div>
+    </div>
+    <script>
+    // Data for the training schedule
+    const scheduleOld = [
+    {
+        "week": 1,
+        "sessions": [
+            {
+                "name": "Pass 1",
+                "description": "Uppvärmning: 5–10 min lätt jogg/gång. Styrka: 2 set med 10–15 reps av knäböj, plankan (30 s), armhävningar och rygglyft. Rörlighet: 5–10 min fokus på höfter, knän och axlar."
+            },
+            {
+                "name": "Pass 2",
+                "description": "Uppvärmning: 10 min hopping/höga knän eller trappsteg. Styrka: utfall 3×10 per ben; hängande situps 5–10 reps; glute bridges 2–3×12. Stretching: fokus på lår, baksida ben och axlar."
+            },
+            {
+                "name": "Pass 3",
+                "description": "Uppvärmning: 5–10 min lätt gång/jogg. Styrka: lätta benpress eller knäböj 3×12–15; biceps curls 2×12. Kondition: hopprep 5–10 min eller cykling/gång med uppförsbacke. Rörlighet."
+            },
+            {
+                "name": "Simpass",
+                "description": "Uppvärmning: 5 min lugn simning (bröst- eller ryggsim). Teknik: 4×25 m bröstsim; 4×25 m ryggsim. Avslutning: 5–10 min lätt simning (crawl eller bröstsim). Stretching."
+            }
+        ]
+    },
+    {
+        "week": 2,
+        "sessions": [
+            {
+                "name": "Pass 1",
+                "description": "Uppvärmning: 5–10 min lätt jogg/gång. Styrka: 2 set med 10–15 reps av knäböj, plankan (30 s), armhävningar och rygglyft. Rörlighet: 5–10 min fokus på höfter, knän och axlar."
+            },
+            {
+                "name": "Pass 2",
+                "description": "Uppvärmning: 10 min hopping/höga knän eller trappsteg. Styrka: utfall 3×10 per ben; hängande situps 5–10 reps; glute bridges 2–3×12. Stretching: fokus på lår, baksida ben och axlar."
+            },
+            {
+                "name": "Pass 3",
+                "description": "Uppvärmning: 5–10 min lätt gång/jogg. Styrka: lätta benpress eller knäböj 3×12–15; biceps curls 2×12. Kondition: hopprep 5–10 min eller cykling/gång med uppförsbacke. Rörlighet."
+            },
+            {
+                "name": "Simpass",
+                "description": "Uppvärmning: 5 min lugn simning (bröst- eller ryggsim). Teknik: 4×25 m bröstsim; 4×25 m ryggsim. Avslutning: 5–10 min lätt simning (crawl eller bröstsim). Stretching."
+            }
+        ]
+    },
+    {
+        "week": 3,
+        "sessions": [
+            {
+                "name": "Pass 1",
+                "description": "Uppvärmning: 10 min snabb gång/jogg. Styrka: knäböj 3×12–15; plankan 30–40 s ×3; armhävningar 10–12 ×3; rygglyft ×15. Dynamiska övningar 2–3 min."
+            },
+            {
+                "name": "Pass 2",
+                "description": "Uppvärmning: 5–10 min lätt gång/cykling. Styrka: step‑ups 2×12 per ben; lätt kettlebell eller hantelövning 2×12. Kondition: intervall – 30 s jogg, 30 s gång ×10. Stretching 5–10 min."
+            },
+            {
+                "name": "Pass 3",
+                "description": "Uppvärmning: 5–10 min lätt jogg. Kondition: intervall 40 s snabb gång/jogg, 20 s vila ×10. Styrka: knäböj 3×12–15; biceps curls 2×12; glute bridges 2×12. Stretch."
+            },
+            {
+                "name": "Simpass",
+                "description": "Uppvärmning: 5 min lätt simning. Teknik: 4×25 m bröstsim; 4×25 m ryggsim. Huvudset: 4×50 m bröstsim; 2×50 m crawl. Avslutning: 5–10 min lätt simning."
+            }
+        ]
+    },
+    {
+        "week": 4,
+        "sessions": [
+            {
+                "name": "Pass 1",
+                "description": "Uppvärmning: 10 min snabb gång/jogg. Styrka: knäböj 3×12–15; plankan 30–40 s ×3; armhävningar 10–12 ×3; rygglyft ×15. Dynamiska övningar 2–3 min."
+            },
+            {
+                "name": "Pass 2",
+                "description": "Uppvärmning: 5–10 min lätt gång/cykling. Styrka: step‑ups 2×12 per ben; lätt kettlebell eller hantelövning 2×12. Kondition: intervall – 30 s jogg, 30 s gång ×10. Stretching 5–10 min."
+            },
+            {
+                "name": "Pass 3",
+                "description": "Uppvärmning: 5–10 min lätt jogg. Kondition: intervall 40 s snabb gång/jogg, 20 s vila ×10. Styrka: knäböj 3×12–15; biceps curls 2×12; glute bridges 2×12. Stretch."
+            },
+            {
+                "name": "Simpass",
+                "description": "Uppvärmning: 5 min lätt simning. Teknik: 4×25 m bröstsim; 4×25 m ryggsim. Huvudset: 4×50 m bröstsim; 2×50 m crawl. Avslutning: 5–10 min lätt simning."
+            }
+        ]
+    },
+    {
+        "week": 5,
+        "sessions": [
+            {
+                "name": "Pass 1",
+                "description": "Uppvärmning: 10 min lätt löpning/gång. Styrka: utfall 3×12 per ben; planka med benlyft 3×30 s; armhävningar 15; rygglyft 3×12–15. Dynamisk rörlighet."
+            },
+            {
+                "name": "Pass 2",
+                "description": "Uppvärmning: 5–10 min gång/cykling. Styrka: step‑ups 3×15 per ben; kettlebell swings 3×15; biceps curls 2×12. Kondition: lätt cykling 20 min eller intervaller 30 s intensiv löpning/30 s vila ×10. Stretch."
+            },
+            {
+                "name": "Pass 3",
+                "description": "Uppvärmning: 5–10 min lätt jogg. Intervaller: 40 s snabb jogg, 20 s vila ×10. Styrka: knäböj 3×12; biceps curls 2×12; glute bridges 2×12. Rörlighet."
+            },
+            {
+                "name": "Simpass",
+                "description": "Uppvärmning: 5–10 min lätt simning. Teknik: 4×25 m bröstsim; 4×25 m ryggsim. Huvudset: 6×50 m bröstsim; 2×50 m crawl. Avslutning: 5–10 min lätt simning."
+            }
+        ]
+    },
+    {
+        "week": 6,
+        "sessions": [
+            {
+                "name": "Pass 1",
+                "description": "Uppvärmning: 10 min lätt löpning/gång. Styrka: utfall 3×12 per ben; planka med benlyft 3×30 s; armhävningar 15; rygglyft 3×12–15. Dynamisk rörlighet."
+            },
+            {
+                "name": "Pass 2",
+                "description": "Uppvärmning: 5–10 min gång/cykling. Styrka: step‑ups 3×15 per ben; kettlebell swings 3×15; biceps curls 2×12. Kondition: lätt cykling 20 min eller intervaller 30 s intensiv löpning/30 s vila ×10. Stretch."
+            },
+            {
+                "name": "Pass 3",
+                "description": "Uppvärmning: 5–10 min lätt jogg. Intervaller: 40 s snabb jogg, 20 s vila ×10. Styrka: knäböj 3×12; biceps curls 2×12; glute bridges 2×12. Rörlighet."
+            },
+            {
+                "name": "Simpass",
+                "description": "Uppvärmning: 5–10 min lätt simning. Teknik: 4×25 m bröstsim; 4×25 m ryggsim. Huvudset: 6×50 m bröstsim; 2×50 m crawl. Avslutning: 5–10 min lätt simning."
+            }
+        ]
+    },
+    {
+        "week": 7,
+        "sessions": [
+            {
+                "name": "Pass 1",
+                "description": "Uppvärmning: 10 min lätt löpning/gång. Styrka: utfall 3×15 per ben; plankan 3×40 s; rygglyft 3×15. Dynamiska övningar med snabba fötter, höga knän, sidogång."
+            },
+            {
+                "name": "Pass 2",
+                "description": "Uppvärmning: 10 min jogg/cykling. Kondition: intervall 40 s jogg, 20 s vila ×12. Styrka: step‑ups 3×15 per ben; kettlebell swings 3×15; biceps curls 2×12. Stretching."
+            },
+            {
+                "name": "Pass 3",
+                "description": "Uppvärmning: 5–10 min lätt jogg. Simulerad simträning (armhävningar och armrotationer). Styrka: glute bridges, armhävningar, rygglyft. Lätt kondition: cykling eller promenad. Stretch."
+            },
+            {
+                "name": "Simpass",
+                "description": "Uppvärmning: 5–10 min lätt simning. Teknik: 4×25 m bröstsim; 4×25 m ryggsim. Huvudset: 6×50 m bröstsim; 2×50 m crawl. Avslutning: 5–10 min lätt simning."
+            }
+        ]
+    },
+    {
+        "week": 8,
+        "sessions": [
+            {
+                "name": "Pass 1",
+                "description": "Uppvärmning: 10 min lätt löpning/gång. Styrka: utfall 3×15 per ben; plankan 3×40 s; rygglyft 3×15. Dynamiska övningar med snabba fötter, höga knän, sidogång."
+            },
+            {
+                "name": "Pass 2",
+                "description": "Uppvärmning: 10 min jogg/cykling. Kondition: intervall 40 s jogg, 20 s vila ×12. Styrka: step‑ups 3×15 per ben; kettlebell swings 3×15; biceps curls 2×12. Stretching."
+            },
+            {
+                "name": "Pass 3",
+                "description": "Uppvärmning: 5–10 min lätt jogg. Simulerad simträning (armhävningar och armrotationer). Styrka: glute bridges, armhävningar, rygglyft. Lätt kondition: cykling eller promenad. Stretch."
+            },
+            {
+                "name": "Simpass",
+                "description": "Uppvärmning: 5–10 min lätt simning. Teknik: 4×25 m bröstsim; 4×25 m ryggsim. Huvudset: 6×50 m bröstsim; 2×50 m crawl. Avslutning: 5–10 min lätt simning."
+            }
+        ]
+    }
     ];
 
-    const state = {
-      completed: {},
-      notes: {}
+    // Define participants and colours used throughout the schedule and progress pages
+    const persons = ['Marcus','Lily','Melissa','Ludvig'];
+    const personColors = {
+        // Colour palette aligned with the Google logo colours for clear differentiation
+        'Marcus': '#4285F4',   // blue
+        'Lily': '#DB4437',     // red
+        'Melissa': '#0F9D58',  // green
+        'Ludvig': '#F4B400'    // yellow
     };
 
-    function renderSchedule() {
-      const el = document.getElementById("scheduleView");
-      el.innerHTML = `
-        <h2>Återkommande Aktiviteter</h2>
-        <ul>${recurring.map(a => `<li><strong>${a.day}</strong>: ${a.activity}</li>`).join("")}</ul>
-      `;
+    // Track which person's schedule is currently selected. If null, show all persons.
+    let currentPerson = null;
+
+    /**
+     * Show the schedule filtered to a specific person. Sets currentPerson and navigates
+     * to the schedule page. When a person is selected, only their checkbox column
+     * will be displayed in the schedule view.
+     *
+     * @param {string} person Name of the person whose schedule to show
+     */
+    function showPersonSchedule(person) {
+        currentPerson = person;
+        showPage('schedule');
+        // Re-render the schedule when switching people so the header and checkboxes update
+        renderSchedule();
     }
 
-    function renderPlanner() {
-      const el = document.getElementById("plannerView");
-      el.innerHTML = `<h2>Träningsplan</h2>` + people.map(person => {
-        return `<section class="planner-week">
-          <h3>${person}</h3>
-          ${weeks.map(week => {
-            const id = `${person}-w${week}`;
-            const checked = state.completed[id] ? "checked" : "";
-            const note = state.notes[id] || "";
-            return `
-              <div class="session">
-                <label>
-                  <input type="checkbox" onchange="toggleComplete('${id}')" ${checked}/> Vecka ${week}
-                </label><br/>
-                <textarea placeholder="Anteckningar..." oninput="saveNote('${id}', this.value)">${note}</textarea>
-              </div>`;
-          }).join("")}
-        </section>`;
-      }).join("");
+    /**
+     * Reset the person filter so all participants appear in the schedule. Used by
+     * the navigation bar when clicking the general Schedule link.
+     */
+    function showGeneralSchedule() {
+        currentPerson = null;
+        showPage('schedule');
+        // Re-render the schedule when clearing the filter
+        renderSchedule();
     }
 
-    function renderProgress() {
-      const el = document.getElementById("progressView");
-      el.innerHTML = `<h2>Framsteg</h2>` + people.map(person => {
-        const total = weeks.length;
-        const done = weeks.filter(week => state.completed[`${person}-w${week}`]).length;
-        const percent = (done / total) * 100;
-        return `
-          <div class="progress-week">
-            <h3>${person}: ${done}/${total}</h3>
-            <div class="progress-bar">
-              <div class="progress-bar-fill" style="width:${percent}%"></div>
-            </div>
-          </div>
-        `;
-      }).join("");
+    /**
+     * Allow editing of an activity. When invoked, prompts the user to modify
+     * the date, time, name and description of the event. After editing, the
+     * event’s Date object and datetime string are updated accordingly, and
+     * the planner, calendar and progress views are refreshed. If the user
+     * cancels any prompt, the event remains unchanged.
+     *
+     * @param {Object} ev The event object to edit
+     */
+    function editEvent(ev) {
+        // Only proceed if the user confirms they want to edit
+        if (!ev) return;
+        const currentDate = ev.datetime.split(' ')[0];
+        const currentTime = ev.datetime.split(' ')[1];
+        const currentName = ev.name;
+        const currentDesc = ev.description || '';
+        const newDate = prompt('Enter new date (YYYY-MM-DD):', currentDate);
+        if (!newDate) return;
+        const newTime = prompt('Enter new time (HH:MM):', currentTime);
+        if (!newTime) return;
+        const newName = prompt('Enter activity name:', currentName);
+        if (!newName) return;
+        const newDesc = prompt('Enter description:', currentDesc);
+        if (newDesc === null) return;
+        // Update the event properties
+        ev.datetime = ${newDate} ${newTime};
+        ev.dateObj = new Date(${newDate}T${newTime});
+        ev.name = newName;
+        ev.description = newDesc;
+        // Re-sort sessions by date to maintain order
+        schedule.forEach(w => {
+            w.sessions.sort((a,b) => a.dateObj - b.dateObj);
+        });
+        // Re-render all views to reflect changes
+        renderSchedule();
+        renderCalendar();
+        renderProgress();
     }
 
-    function toggleComplete(id) {
-      state.completed[id] = !state.completed[id];
-      renderProgress(); // update progress
+    /**
+     * Format a session date string into a human‑friendly form with day of week,
+     * month name and ordinal suffix for the day. Example:
+     *   "2025-08-05 18:00" -> "Tuesday August 5th 18:00"
+     * If the input cannot be parsed, the original string is returned.
+     *
+     * @param {string} dateTimeStr Session date/time in YYYY-MM-DD HH:MM format
+     * @returns {string} Formatted date/time string
+     */
+    function formatSessionDateTime(dateTimeStr) {
+        try {
+            // Parse the incoming string into its components
+            const [datePart, timePart] = dateTimeStr.split(' ');
+            if (!datePart || !timePart) return dateTimeStr;
+            const [year, month, day] = datePart.split('-').map(Number);
+            const [hours, minutes] = timePart.split(':').map(Number);
+            const dateObj = new Date(year, month - 1, day, hours, minutes);
+            // Arrays for day and month names
+            const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            const dayName = days[dateObj.getDay()];
+            const monthName = months[dateObj.getMonth()];
+            // Determine ordinal suffix for the day (1st, 2nd, 3rd, etc.)
+            const d = dateObj.getDate();
+            const suffix = (d % 10 === 1 && d !== 11) ? 'st' :
+                           (d % 10 === 2 && d !== 12) ? 'nd' :
+                           (d % 10 === 3 && d !== 13) ? 'rd' : 'th';
+            const dayWithSuffix = ${d}${suffix};
+            // Format hours and minutes with leading zeros
+            const hh = String(dateObj.getHours()).padStart(2, '0');
+            const mm = String(dateObj.getMinutes()).padStart(2, '0');
+            return ${dayName} ${monthName} ${dayWithSuffix} ${hh}:${mm};
+        } catch (e) {
+            // If parsing fails for any reason, return the original string
+            return dateTimeStr;
+        }
+    }
+    // Templates for training sessions used to dynamically build the schedule. Each entry mirrors the descriptions from the original program.
+    const sessionTemplates = [
+        {
+            name: 'Workout 1',
+            description: 'Warm-up: 5–10 min light jog/walk. Strength: 2 sets of 10–15 reps of squats, plank (30 s), push-ups and back extensions. Mobility: 5–10 min focusing on hips, knees and shoulders.'
+        },
+        {
+            name: 'Workout 2',
+            description: 'Warm-up: 10 min skipping/high knees or step-ups. Strength: lunges 3×10 per leg; hanging sit-ups 5–10 reps; glute bridges 2–3×12. Stretching: focus on thighs, hamstrings and shoulders.'
+        },
+        {
+            name: 'Workout 3',
+            description: 'Warm-up: 5–10 min easy walk/jog. Strength: light leg press or squats 3×12–15; biceps curls 2×12. Endurance: jump rope 5–10 min or cycling/walking uphill. Mobility.'
+        },
+        {
+            name: 'Swim session',
+            description: 'Warm-up: 5 min easy swimming (breaststroke or backstroke). Technique: 4×25 m breaststroke; 4×25 m backstroke. Cooldown: 5–10 min easy swimming (crawl or breaststroke). Stretching.'
+        }
+    ];
+
+    // Define additional recurring activities outside of the core training sessions. Each entry
+    // specifies which person(s) participate, the date range, the day of week, start and end
+    // times and whether the session is self‑organised or organised by a club/association.
+    // All dates use YYYY-MM-DD format and times use HH:MM.
+    const extraActivities = [
+        {
+            name: 'Piano',
+            persons: ['Marcus','Lily','Ludvig'],
+            startDate: '2025-08-20',
+            endDate: '2025-12-17',
+            dayOfWeek: 3, // Wednesday (0=Sunday)
+            startTime: '17:00',
+            endTime: '17:30',
+            description: 'Weekly piano lesson',
+            organizedBy: 'self'
+        },
+        {
+            name: 'Simning Supercrawl',
+            persons: ['Lily'],
+            startDate: '2025-08-29',
+            endDate: '2025-12-19',
+            dayOfWeek: 5, // Friday
+            startTime: '15:40',
+            endTime: '16:20',
+            description: 'Supercrawl swimming class',
+            organizedBy: 'club'
+        },
+        {
+            name: 'Simning Grund 2',
+            persons: ['Ludvig'],
+            startDate: '2025-08-29',
+            endDate: '2025-12-19',
+            dayOfWeek: 5, // Friday
+            startTime: '15:45',
+            endTime: '16:15',
+            description: 'Grund 2 swimming class',
+            organizedBy: 'club'
+        },
+        {
+            name: 'Ridning Eksjö',
+            persons: ['Melissa'],
+            startDate: '2025-08-12',
+            endDate: '2025-12-16',
+            dayOfWeek: 2, // Tuesday
+            startTime: '17:00',
+            endTime: '18:00',
+            description: 'Horse riding in Eksjö',
+            organizedBy: 'club'
+        }
+    ];
+    // Offsets (in days) relative to baseDate for each session within a week: 0 (first day), 2, 4, 5 correspond to Tue, Thu, Sat, Sun.
+    const sessionDayOffsets = [0, 2, 4, 5];
+    // Start times for each session in HH:MM format
+    const sessionTimes = ['18:00','18:00','17:00','10:00'];
+    // Base date for the first week of training (starting today). We reset the time to midnight so that
+    // date arithmetic (adding days) isn't affected by the current time of day. Using the user's local
+    // timezone ensures that session dates reflect the actual local calendar. If the page is opened
+    // on a different day in the future, the schedule will always start from “today”.
+    const baseDate = new Date();
+    baseDate.setHours(0, 0, 0, 0);
+
+    // ---- Calendar state variables ----
+    // Track the month and year being viewed in the calendar. We initialise
+    // these based on the baseDate so the calendar opens on the current
+    // month by default. calendarPerson determines which person’s events are
+    // displayed; null means show all persons.
+    let calendarMonth = baseDate.getMonth();
+    let calendarYear = baseDate.getFullYear();
+    let calendarPerson = null;
+
+    // Planner view state variables: track the month and year being viewed in the planner (formerly schedule).
+    // We initialise these to match the calendar so that both views start in the current month. Changing
+    // plannerMonth or plannerYear updates the planner grid accordingly.
+    let plannerMonth = baseDate.getMonth();
+    let plannerYear = baseDate.getFullYear();
+    // Helper function to compute ISO week number from a Date object
+    function getISOWeekNumber(date) {
+        const tmp = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+        const dayNum = tmp.getUTCDay() || 7;
+        tmp.setUTCDate(tmp.getUTCDate() + 4 - dayNum);
+        const yearStart = new Date(Date.UTC(tmp.getUTCFullYear(),0,1));
+        return Math.ceil((((tmp - yearStart) / 86400000) + 1) / 7);
     }
 
-    function saveNote(id, value) {
-      state.notes[id] = value;
+    /**
+     * Format a Date object into a human-friendly string showing the day of week, month name
+     * and ordinal day. This is used to display the current date alongside the week header.
+     * Example: new Date(2025, 7, 5) (Aug 5, 2025) -> "Tuesday August 5th".
+     *
+     * @param {Date} dateObj A Date object representing the date to format
+     * @returns {string} A formatted string like "Tuesday August 5th"
+     */
+    function formatDayDate(dateObj) {
+        const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        const dayName = days[dateObj.getDay()];
+        const monthName = months[dateObj.getMonth()];
+        const d = dateObj.getDate();
+        const suffix = (d % 10 === 1 && d !== 11) ? 'st' : (d % 10 === 2 && d !== 12) ? 'nd' : (d % 10 === 3 && d !== 13) ? 'rd' : 'th';
+        return ${dayName} ${monthName} ${d}${suffix};
     }
 
-    function showView(view) {
-      ["schedule", "planner", "progress"].forEach(v => {
-        document.getElementById(v + "View").style.display = v === view ? "block" : "none";
-      });
+    // Determine the ISO week number and formatted string for today's date. These values
+    // are computed once at page load and used when rendering week headers. If you open
+    // the app on a different day, these values will reflect that date.
+    const _todayDate = new Date();
+    _todayDate.setHours(0, 0, 0, 0);
+    const currentWeekNumber = getISOWeekNumber(_todayDate);
+    const formattedToday = formatDayDate(_todayDate);
+
+    // Store the currently selected week filter. By default, it is set to the
+    // current ISO week number so that the schedule initially shows the
+    // current week when first loaded. When the user changes the week
+    // dropdown, this variable is updated accordingly. The filterSchedule
+    // function reads this value to control visibility of week cards.
+    let selectedWeekFilter = String(currentWeekNumber);
+
+    // Populate the informational banner with today's date. It will be shown on the schedule page
+    const _todayInfoElement = document.getElementById('today-info');
+    if (_todayInfoElement) {
+        /* Display only a calendar icon to represent today's date, without showing the month or day. */
+        _todayInfoElement.textContent = '📅';
+    }
+    // Dynamically build the schedule for 8 consecutive weeks starting from the baseDate.
+    // Each session receives an actual Date object for its date and a formatted string for display.
+    const schedule = [];
+    for (let i = 0; i < 8; i++) {
+        const weekStart = new Date(baseDate);
+        // Add i * 7 days to the start date to compute the start of this week
+        weekStart.setDate(baseDate.getDate() + i * 7);
+        // Compute ISO week number based on the weekStart
+        const weekNumber = getISOWeekNumber(weekStart);
+        const sessions = [];
+        for (let j = 0; j < sessionTemplates.length; j++) {
+            // Create a date for this session by copying the baseDate and adding the offset in days
+            const sessDate = new Date(baseDate);
+            sessDate.setDate(baseDate.getDate() + i * 7 + sessionDayOffsets[j]);
+            // Set the session time (hours and minutes) explicitly
+            const [hh, mm] = sessionTimes[j].split(':');
+            sessDate.setHours(parseInt(hh, 10), parseInt(mm, 10), 0, 0);
+            // Format the date/time as YYYY-MM-DD HH:MM for display
+            const year = sessDate.getFullYear();
+            const month = String(sessDate.getMonth() + 1).padStart(2, '0');
+            const day = String(sessDate.getDate()).padStart(2, '0');
+            const hour = String(sessDate.getHours()).padStart(2, '0');
+            const minute = String(sessDate.getMinutes()).padStart(2, '0');
+            const dateTime = ${year}-${month}-${day} ${hour}:${minute};
+            sessions.push({
+                name: sessionTemplates[j].name,
+                description: sessionTemplates[j].description,
+                datetime: dateTime,
+                dateObj: sessDate,
+                // Mark whether this session is arranged by the family (self) or by a club/association.
+                // By default, the swim session (index 3) is club-organised; others are self-organised.
+                organizedBy: j === 3 ? 'club' : 'self',
+                // Assign participants for each training session. All core sessions are for the
+                // whole family, except the swim session which is only for Lily.
+                persons: j === 3 ? ['Lily'] : persons
+            });
+        }
+        schedule.push({
+            week: weekNumber,
+            startDate: weekStart.toISOString().slice(0, 10),
+            sessions: sessions
+        });
     }
 
-    window.addEventListener("scroll", () => {
-      const btn = document.querySelector(".back-to-top");
-      btn.style.display = window.scrollY > 300 ? "block" : "none";
+    // ------------------------------------------------------------
+    // Add recurring extra activities to the schedule
+    // Each activity may span beyond the initial 8 weeks, so this
+    // section adds new week entries on demand and appends the
+    // corresponding sessions. After adding all activities, the
+    // schedule is sorted and each week's sessions are ordered by
+    // their date/time.
+    extraActivities.forEach(activity => {
+        // Parse start and end dates
+        const start = new Date(activity.startDate);
+        const end = new Date(activity.endDate);
+        start.setHours(0, 0, 0, 0);
+        end.setHours(0, 0, 0, 0);
+        // Find the first occurrence on or after the start date
+        const first = new Date(start);
+        const dayDiff = (activity.dayOfWeek - first.getDay() + 7) % 7;
+        first.setDate(first.getDate() + dayDiff);
+        // Loop through each occurrence until the end date
+        for (let d = new Date(first); d <= end; d.setDate(d.getDate() + 7)) {
+            // Create a Date object with the activity's start time
+            const [hh, mm] = activity.startTime.split(':');
+            const occDate = new Date(d.getFullYear(), d.getMonth(), d.getDate(), parseInt(hh, 10), parseInt(mm, 10), 0, 0);
+            const weekNum = getISOWeekNumber(occDate);
+            // Find or create the week entry
+            let weekObj = schedule.find(w => w.week === weekNum);
+            if (!weekObj) {
+                weekObj = {
+                    week: weekNum,
+                    startDate: occDate.toISOString().slice(0, 10),
+                    sessions: []
+                };
+                schedule.push(weekObj);
+            }
+            // Format the datetime string (YYYY-MM-DD HH:MM)
+            const year = occDate.getFullYear();
+            const month = String(occDate.getMonth() + 1).padStart(2, '0');
+            const day = String(occDate.getDate()).padStart(2, '0');
+            const hour = String(occDate.getHours()).padStart(2, '0');
+            const minute = String(occDate.getMinutes()).padStart(2, '0');
+            const dateTimeStr = ${year}-${month}-${day} ${hour}:${minute};
+            // Push the activity into the week's sessions
+            weekObj.sessions.push({
+                name: activity.name,
+                description: activity.description,
+                datetime: dateTimeStr,
+                dateObj: occDate,
+                organizedBy: activity.organizedBy,
+                persons: activity.persons
+            });
+        }
+    });
+    // Sort the weeks by their ISO week number and sort sessions by datetime within each week
+    schedule.sort((a, b) => a.week - b.week);
+    schedule.forEach(week => {
+        week.sessions.sort((a, b) => a.dateObj - b.dateObj);
     });
 
-    // Startvy
-    renderSchedule();
-    renderPlanner();
-    renderProgress();
-    showView("schedule");
-  </script>
+    // ---------------------------------------------------------------------
+    // Compute school food menu events. These events are displayed only in
+    // the calendar and are not part of the training schedule. Each entry
+    // specifies the ISO week number, a mapping of weekdays (0=Monday) to
+    // a description string, and the year (2025). We compute the actual
+    // dates for each menu item and push them into the foodEvents array.
+
+    /**
+     * Return a Date object representing the Monday of a given ISO week number
+     * and year. Adapted from common ISO week calculation algorithms.
+     *
+     * @param {number} week The ISO week number (1–53)
+     * @param {number} year The year (e.g., 2025)
+     * @returns {Date} Date representing Monday of that ISO week
+     */
+    function getDateOfISOWeek(week, year) {
+        const simple = new Date(year, 0, 1 + (week - 1) * 7);
+        const dow = simple.getDay();
+        let ISOweekStart = new Date(simple);
+        if (dow <= 4) {
+            ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+        } else {
+            ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+        }
+        ISOweekStart.setHours(0, 0, 0, 0);
+        return ISOweekStart;
+    }
+
+    // Menu definitions for week 32 and 33. Each object maps weekdays (0=Monday) to a
+    // menu description. Only Monday–Friday are defined; weekends are omitted.
+    const foodMenuDefinitions = [
+        {
+            week: 32,
+            menus: {
+                0: 'Skolan: Sommarlov, Förskola/fritids: Morotsås/Köttfärssås och spaghetti.',
+                1: 'Skolan: Sommarlov, Förskola/fritids: Grönsaksbiff/Panerad fisk, kall sås med örter och potatis.',
+                2: 'Skolan: Sommarlov, Förskola/fritids: Veg. korv/Falukorv och potatismos.',
+                3: 'Skolan: Sommarlov, Förskola/fritids: Veg sås/Ost o skinksås och pasta.',
+                4: 'Skolan: Sommarlov, Förskola/fritids: Grönsaksbiff,/Kycklingpannbiff sås och bulgur.'
+            },
+            year: 2025
+        },
+        {
+            week: 33,
+            menus: {
+                0: 'Skolan: Sommarlov, Förskola/fritids: Falafel, bulgur och tomatsås/Köttbullar, potatis och brunsås.',
+                1: 'Skolan: Sommarlov, Förskola/fritids: Veg korv/Grillkorv och potatismos.',
+                2: 'Skolan: Sommarlov, Förskola/fritids: Vegetarisk gryta/Karibisk kycklinggryta och ris.',
+                3: 'Skolan: Sommarlov, Förskola/fritids: Grönsaksbiff/Panerad fisk, potatis och kall gurksås.',
+                4: 'Skolan: Sommarlov, Förskola/fritids: Morotsås/Kycklingfärssås och spaghetti.'
+            },
+            year: 2025
+        }
+    ];
+
+    // Build an array of food events with date, description, and metadata. Each
+    // event will be shown in the calendar grid with a plate icon. These
+    // events do not belong to any person and are not counted in progress.
+    const foodEvents = [];
+    foodMenuDefinitions.forEach(def => {
+        const monday = getDateOfISOWeek(def.week, def.year);
+        Object.keys(def.menus).forEach(dayKey => {
+            const offset = parseInt(dayKey, 10);
+            const date = new Date(monday);
+            date.setDate(monday.getDate() + offset);
+            // Set a default time around noon. We use 12:00 so the food events
+            // appear after morning workouts in the calendar.
+            date.setHours(12, 0, 0, 0);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const dateTimeStr = ${year}-${month}-${day} 12:00;
+            foodEvents.push({
+                name: 'School food',
+                description: def.menus[dayKey],
+                datetime: dateTimeStr,
+                dateObj: date,
+                organizedBy: 'food',
+                persons: []
+            });
+        });
+    });
+    // Load notes from localStorage for each week and session
+    function loadNotes() {
+        const notes = {};
+        schedule.forEach(week => {
+            notes[week.week] = {};
+            week.sessions.forEach(session => {
+                const key = week${week.week}_${session.name};
+                notes[week.week][session.name] = localStorage.getItem(key) || "";
+            });
+        });
+        return notes;
+    }
+
+    // Save a note to localStorage
+    function saveNote(week, sessionName, value) {
+        const key = week${week}_${sessionName};
+        localStorage.setItem(key, value);
+    }
+
+    // Load completion states for each person, week and session
+    function loadCompletions() {
+        const completions = {};
+        schedule.forEach(weekObj => {
+            completions[weekObj.week] = {};
+            weekObj.sessions.forEach(session => {
+                completions[weekObj.week][session.name] = {};
+                persons.forEach(person => {
+                    const key = week${weekObj.week}_${session.name}_${person}_completed;
+                    completions[weekObj.week][session.name][person] = localStorage.getItem(key) === 'true';
+                });
+            });
+        });
+        return completions;
+    }
+
+    // Save completion state for a specific person in a session
+    function saveCompletion(week, sessionName, person, value) {
+        const key = week${week}_${sessionName}_${person}_completed;
+        localStorage.setItem(key, value);
+    }
+
+    // Render the schedule view
+    function renderSchedule() {
+        const container = document.getElementById('schedule-container');
+        const notes = loadNotes();
+        const completions = loadCompletions();
+        container.innerHTML = '';
+        // Optionally display a heading indicating which person’s schedule is shown
+        const filterPerson = currentPerson;
+        // Create a row that contains both the heading and the person switcher.  This
+        // ensures they appear side-by-side in the header area.
+        const headerRow = document.createElement('div');
+        headerRow.className = 'schedule-header-row';
+        const heading = document.createElement('h2');
+        // Remove bottom margin because the flex container controls spacing
+        heading.style.marginBottom = '0';
+        heading.style.fontFamily = 'Roboto, Arial, sans-serif';
+        heading.style.fontSize = '22px';
+        heading.style.fontWeight = '500';
+        // Always use the secondary colour (red) for the schedule heading, regardless of the selected person
+        heading.style.color = getComputedStyle(document.documentElement).getPropertyValue('--secondary-color');
+        if (filterPerson) {
+            heading.textContent = Schedule - ${filterPerson};
+        } else {
+            heading.textContent = 'Schedule';
+        }
+        headerRow.appendChild(heading);
+        // Person switcher to allow changing user directly from the schedule page
+        const switcher = document.createElement('div');
+        switcher.className = 'person-switcher';
+        const switchLabel = document.createElement('label');
+        switchLabel.textContent = 'Switch user:';
+        switcher.appendChild(switchLabel);
+        const switchSelect = document.createElement('select');
+        // Option for showing all users
+        const optAll = document.createElement('option');
+        optAll.value = 'all';
+        optAll.textContent = 'All';
+        switchSelect.appendChild(optAll);
+        persons.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p;
+            opt.textContent = p;
+            switchSelect.appendChild(opt);
+        });
+        // Set the current selection based on filterPerson
+        switchSelect.value = filterPerson || 'all';
+        // When changed, update the schedule view accordingly
+        switchSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (val === 'all') {
+                showGeneralSchedule();
+            } else {
+                showPersonSchedule(val);
+            }
+        });
+        switcher.appendChild(switchSelect);
+        headerRow.appendChild(switcher);
+        container.appendChild(headerRow);
+
+        // Add week filter select
+        const filterWrapper = document.createElement('div');
+        filterWrapper.className = 'week-filter';
+        const filterLabel = document.createElement('label');
+        filterLabel.textContent = 'Select week:';
+        filterWrapper.appendChild(filterLabel);
+        const weekSelect = document.createElement('select');
+        weekSelect.id = 'week-select';
+        // Option to show all weeks
+        const allOpt = document.createElement('option');
+        allOpt.value = 'all';
+        allOpt.textContent = 'All weeks';
+        weekSelect.appendChild(allOpt);
+        // Unique week numbers from schedule
+        schedule.forEach(w => {
+            const opt = document.createElement('option');
+            opt.value = String(w.week);
+            opt.textContent = Week ${w.week};
+            weekSelect.appendChild(opt);
+        });
+        weekSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            selectedWeekFilter = val;
+            filterSchedule();
+        });
+        filterWrapper.appendChild(weekSelect);
+        container.appendChild(filterWrapper);
+        // Set the dropdown to the currently selected week filter on initial render
+        weekSelect.value = selectedWeekFilter;
+        // Render each week
+        schedule.forEach(weekObj => {
+            const weekDiv = document.createElement('div');
+            weekDiv.className = 'week';
+            // Tag this element with its week number for filtering
+            weekDiv.dataset.week = weekObj.week;
+            // Display ISO week number. We avoid duplicating today's date here, as the date
+            // is shown prominently in the banner above the schedule. The week header now
+            // contains only the ISO week number, e.g., "Week 32".
+            const weekHeader = document.createElement('h2');
+            weekHeader.textContent = Week ${weekObj.week};
+            weekDiv.appendChild(weekHeader);
+            // Compute and render weekly progress bar before listing sessions. Use selected person if available,
+            // otherwise aggregate across all persons. This ensures the progress is visible at the top of the week card.
+            (function() {
+                let totalWorkouts = 0;
+                let completedWorkouts = 0;
+                let barColor;
+                let labelText;
+                if (filterPerson) {
+                    weekObj.sessions.forEach(sess => {
+                        // Only count workout sessions for the selected person
+                        if (!sess.name.startsWith('Workout')) return;
+                        if (sess.persons && !sess.persons.includes(filterPerson)) {
+                            return;
+                        }
+                        totalWorkouts++;
+                        if (completions[weekObj.week][sess.name][filterPerson]) {
+                            completedWorkouts++;
+                        }
+                    });
+                    barColor = personColors[filterPerson];
+                    labelText = ${completedWorkouts}/${totalWorkouts} workouts completed;
+                } else {
+                    persons.forEach(person => {
+                        weekObj.sessions.forEach(sess => {
+                            // Count only workouts for each person
+                            if (!sess.name.startsWith('Workout')) return;
+                            if (sess.persons && !sess.persons.includes(person)) {
+                                return;
+                            }
+                            totalWorkouts++;
+                            if (completions[weekObj.week][sess.name][person]) {
+                                completedWorkouts++;
+                            }
+                        });
+                    });
+                    barColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim() || '#4285F4';
+                    labelText = ${completedWorkouts}/${totalWorkouts} workouts completed;
+                }
+                const progressWrapper = document.createElement('div');
+                progressWrapper.style.marginTop = '0.5em';
+                const progLabel = document.createElement('span');
+                progLabel.textContent = labelText;
+                progLabel.style.fontSize = '14px';
+                progLabel.style.fontWeight = '600';
+                progLabel.style.color = barColor;
+                progressWrapper.appendChild(progLabel);
+                const progBarContainer = document.createElement('div');
+                progBarContainer.style.background = barColor + '20';
+                progBarContainer.style.borderRadius = '4px';
+                progBarContainer.style.height = '8px';
+                progBarContainer.style.marginTop = '0.3em';
+                const progBar = document.createElement('div');
+                progBar.style.background = barColor;
+                progBar.style.height = '8px';
+                    progBar.style.borderRadius = '4px';
+                progBar.style.width = totalWorkouts > 0 ? ${(completedWorkouts / totalWorkouts) * 100}% : '0%';
+                progBarContainer.appendChild(progBar);
+                progressWrapper.appendChild(progBarContainer);
+                weekDiv.appendChild(progressWrapper);
+            })();
+            weekObj.sessions.forEach(session => {
+                // Skip sessions that do not include the selected person
+                if (filterPerson && session.persons && !session.persons.includes(filterPerson)) {
+                    return;
+                }
+                const sessionDiv = document.createElement('div');
+                sessionDiv.className = 'session';
+                // Header containing date/time and session name; show date/time first
+                const headerWrapper = document.createElement('div');
+                const sHeader = document.createElement('h3');
+                // Format the date/time to human friendly form
+                const formatted = formatSessionDateTime(session.datetime);
+                // Create icon to indicate organiser: house for self, building for club
+                const organiserIcon = document.createElement('span');
+                organiserIcon.textContent = session.organizedBy === 'club' ? '🏢' : '🏠';
+                organiserIcon.style.marginLeft = '0.4em';
+                organiserIcon.style.fontSize = '16px';
+                sHeader.textContent = ${formatted} - ${session.name};
+                // Append icon after the text
+                sHeader.appendChild(organiserIcon);
+                headerWrapper.appendChild(sHeader);
+                sessionDiv.appendChild(headerWrapper);
+                // Description
+                const desc = document.createElement('p');
+                desc.textContent = session.description;
+                sessionDiv.appendChild(desc);
+                // Completion checkbox for the current person. Only show checkboxes
+                // for workout sessions (those whose names start with "Workout").
+                if (filterPerson && session.name.startsWith('Workout')) {
+                    const compRow = document.createElement('div');
+                    compRow.className = 'completion-row';
+                    const label = document.createElement('label');
+                    label.className = 'person-checkbox';
+                    const color = personColors[filterPerson];
+                    const cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.checked = completions[weekObj.week][session.name][filterPerson];
+                    const span = document.createElement('span');
+                    span.textContent = 'Completed';
+                    span.style.marginLeft = '0.3em';
+                    label.appendChild(cb);
+                    label.appendChild(span);
+                    // Style based on state
+                    label.style.border = 1px solid ${color}40;
+                    if (cb.checked) {
+                        label.style.background = color;
+                        label.style.color = '#fff';
+                        span.style.color = '#fff';
+                        label.style.fontWeight = '600';
+                    } else {
+                        label.style.background = color + '20';
+                        label.style.color = '#000';
+                        span.style.color = color;
+                        label.style.fontWeight = 'normal';
+                    }
+                    cb.addEventListener('change', (e) => {
+                        saveCompletion(weekObj.week, session.name, filterPerson, e.target.checked);
+                        // Reapply styling on toggle
+                        if (e.target.checked) {
+                            label.style.background = color;
+                            label.style.color = '#fff';
+                            span.style.color = '#fff';
+                            label.style.fontWeight = '600';
+                        } else {
+                            label.style.background = color + '20';
+                            label.style.color = '#000';
+                            span.style.color = color;
+                            label.style.fontWeight = 'normal';
+                        }
+                        // Re-render weekly progress bar and progress page
+                        renderSchedule();
+                        renderProgress();
+                    });
+                    compRow.appendChild(label);
+                    sessionDiv.appendChild(compRow);
+                }
+                // Notes textarea
+                const textarea = document.createElement('textarea');
+                textarea.value = notes[weekObj.week][session.name];
+                textarea.placeholder = 'Notes…';
+                textarea.addEventListener('input', (e) => {
+                    saveNote(weekObj.week, session.name, e.target.value);
+                });
+                sessionDiv.appendChild(textarea);
+                weekDiv.appendChild(sessionDiv);
+            });
+            // Add the finished weekDiv to the schedule container
+            container.appendChild(weekDiv);
+        });
+
+        // Apply the current week filter after rendering all weeks so that only
+        // the selected week (or all weeks) is displayed by default. Without
+        // this call, the dropdown selection would not be respected on initial
+        // load.
+        filterSchedule();
+    }
+
+    /**
+     * Change the currently viewed month in the calendar by a given offset. A
+     * negative offset moves to the previous month; a positive offset moves
+     * forward. The month and year wrap appropriately (e.g., moving back from
+     * January goes to December of the previous year). After adjusting the
+     * month/year, this function re-renders the calendar.
+     *
+     * @param {number} offset The number of months to move forward (positive) or
+     *                        backward (negative)
+     */
+    function changeMonth(offset) {
+        calendarMonth += offset;
+        if (calendarMonth < 0) {
+            calendarMonth = 11;
+            calendarYear--;
+        } else if (calendarMonth > 11) {
+            calendarMonth = 0;
+            calendarYear++;
+        }
+        renderCalendar();
+    }
+
+    /**
+     * Render a month-view calendar showing all sessions and activities for the
+     * selected month and person. Events are grouped by day and displayed in
+     * chronological order with coloured dots indicating participants and
+     * icons showing whether the activity is organised by the family or by a
+     * club. A person filter allows toggling between all events and events
+     * involving a specific family member.
+     */
+    function renderCalendar() {
+        const container = document.getElementById('calendar-container');
+        if (!container) return;
+        container.innerHTML = '';
+        // Build header with navigation and person filter
+        const header = document.createElement('div');
+        header.className = 'calendar-header';
+        // Month navigation buttons
+        const monthNav = document.createElement('div');
+        monthNav.className = 'month-nav';
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = '←';
+        prevBtn.addEventListener('click', () => changeMonth(-1));
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = '→';
+        nextBtn.addEventListener('click', () => changeMonth(1));
+        monthNav.appendChild(prevBtn);
+        monthNav.appendChild(nextBtn);
+        // Month title
+        const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        const title = document.createElement('h2');
+        title.textContent = ${monthNames[calendarMonth]} ${calendarYear};
+        // Build a names row instead of a dropdown filter. This row allows quick switching
+        // between viewing all events and viewing a specific person's events. Each name
+        // acts as a link; clicking sets calendarPerson and refreshes the views.
+        const namesRow = document.createElement('div');
+        namesRow.className = 'calendar-names';
+        // Function to create a button for a person (or all)
+        function createNameButton(name, value) {
+            const btn = document.createElement('button');
+            btn.textContent = name;
+            // Apply active class when this name is selected
+            const isActive = (value === null && calendarPerson == null) || (calendarPerson === value);
+            if (isActive) btn.classList.add('active');
+            btn.addEventListener('click', () => {
+                calendarPerson = value;
+                // Refresh calendar and other views when changing person
+                renderCalendar();
+                renderSchedule();
+                renderProgress();
+            });
+            return btn;
+        }
+        // 'All' option is represented by null value
+        namesRow.appendChild(createNameButton('All', null));
+        persons.forEach(p => {
+            namesRow.appendChild(createNameButton(p, p));
+        });
+        // Assemble header
+        header.appendChild(monthNav);
+        header.appendChild(title);
+        // Append names row directly after the title
+        header.appendChild(namesRow);
+        container.appendChild(header);
+        // Flatten schedule into an array of all events (sessions, extra activities and school food)
+        const events = [];
+        schedule.forEach(weekObj => {
+            weekObj.sessions.forEach(sess => {
+                events.push(sess);
+            });
+        });
+        // Include school food menu events. These have no participants and use a plate icon.
+        foodEvents.forEach(fe => events.push(fe));
+        // Create a grid calendar view. We compute the first day of the month and the
+        // offset to the previous Monday. Then we iterate through the required number
+        // of rows (weeks) and columns (days). Each cell contains the date number
+        // and a list of events occurring on that date.
+        const startOfMonth = new Date(calendarYear, calendarMonth, 1);
+        const offset = (startOfMonth.getDay() + 6) % 7; // 0=Mon
+        const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+        const totalCells = offset + daysInMonth;
+        const rows = Math.ceil(totalCells / 7);
+        // Build the table
+        const table = document.createElement('table');
+        table.className = 'calendar-table';
+        // Header row with day names (Monday to Sunday)
+        const dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+        const thead = document.createElement('thead');
+        const hdrRow = document.createElement('tr');
+        dayNames.forEach(day => {
+            const th = document.createElement('th');
+            th.textContent = day;
+            hdrRow.appendChild(th);
+        });
+        thead.appendChild(hdrRow);
+        table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        // Generate rows
+        for (let row = 0; row < rows; row++) {
+            const tr = document.createElement('tr');
+            for (let col = 0; col < 7; col++) {
+                const cellIndex = row * 7 + col;
+                const dayNum = cellIndex - offset + 1;
+                const cellDate = new Date(calendarYear, calendarMonth, dayNum);
+                const td = document.createElement('td');
+                // Mark cells outside the current month
+                if (cellDate.getMonth() !== calendarMonth) {
+                    td.classList.add('other-month');
+                }
+                // Date number
+                const dateDiv = document.createElement('div');
+                dateDiv.className = 'date-number';
+                dateDiv.textContent = cellDate.getDate();
+                td.appendChild(dateDiv);
+                // Events container
+                const eventsDiv = document.createElement('div');
+                eventsDiv.className = 'events';
+        // Preload completions for faster lookup
+        const completions = loadCompletions();
+        // Find events on this date matching the person filter
+        events.forEach(event => {
+            // Skip events that don't occur on the current date
+            if (event.dateObj.getFullYear() !== cellDate.getFullYear() ||
+                event.dateObj.getMonth() !== cellDate.getMonth() ||
+                event.dateObj.getDate() !== cellDate.getDate()) {
+                return;
+            }
+            // Filter by person if a specific person is selected in the calendar. If no person filter,
+            // show all events.
+            if (calendarPerson && (!event.persons || !event.persons.includes(calendarPerson))) {
+                return;
+            }
+            // Create a container for this event
+            const evItem = document.createElement('div');
+            evItem.className = 'event-item';
+            // Attach the description as a tooltip for more details
+            if (event.description) {
+                evItem.title = event.description;
+            }
+            // Compute whether this event is a workout (to display completion status)
+            const isWorkout = event.name && event.name.startsWith('Workout');
+            // Compute ISO week number for this event
+            const eventWeek = getISOWeekNumber(event.dateObj);
+            let isCompleted = false;
+            if (isWorkout && calendarPerson && event.persons && event.persons.includes(calendarPerson)) {
+                // Check if this workout session has been completed by the current person
+                if (completions[eventWeek] && completions[eventWeek][event.name] && completions[eventWeek][event.name][calendarPerson]) {
+                    isCompleted = true;
+                }
+            }
+            // For food events, we omit the time and participant dots
+            if (event.organizedBy !== 'food') {
+                // Time label
+                const timeSpan = document.createElement('span');
+                timeSpan.className = 'time';
+                timeSpan.textContent = event.datetime.split(' ')[1];
+                evItem.appendChild(timeSpan);
+                // Participant dots
+                const dotsDiv = document.createElement('div');
+                dotsDiv.className = 'dots';
+                if (event.persons) {
+                    event.persons.forEach(p => {
+                        // Show a dot only if there is no filter or the dot corresponds to the selected person
+                        if (!calendarPerson || p === calendarPerson) {
+                            const dot = document.createElement('span');
+                            dot.className = 'dot';
+                            dot.style.background = personColors[p];
+                            dot.title = p; // show person name on hover
+                            dotsDiv.appendChild(dot);
+                        }
+                    });
+                }
+                evItem.appendChild(dotsDiv);
+            }
+            // Event name
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = event.name;
+            evItem.appendChild(nameSpan);
+            // If this is a workout and a person is selected, show a checkmark if completed
+            if (isWorkout && calendarPerson && event.persons && event.persons.includes(calendarPerson)) {
+                const doneSpan = document.createElement('span');
+                doneSpan.className = 'done-icon';
+                doneSpan.style.marginLeft = '0.2em';
+                // Colour the checkmark using the success colour defined in CSS variables
+                doneSpan.style.color = getComputedStyle(document.documentElement).getPropertyValue('--success-color').trim();
+                doneSpan.textContent = isCompleted ? '✓' : '';
+                // Provide visual indicator of ability to toggle completion
+                doneSpan.title = isCompleted ? 'Workout completed' : 'Click to mark this workout as completed';
+                evItem.appendChild(doneSpan);
+            }
+            // Icon representing organiser
+            const iconSpan = document.createElement('span');
+            iconSpan.className = 'icon';
+            if (event.organizedBy === 'food') {
+                iconSpan.textContent = '🍽';
+            } else if (event.organizedBy === 'club') {
+                iconSpan.textContent = '🏢';
+            } else {
+                iconSpan.textContent = '🏠';
+            }
+            evItem.appendChild(iconSpan);
+            // Attach a click handler for toggling workout completion. Only applies if this is a
+            // workout and a person filter is selected. Clicking toggles the completion state and
+            // re-renders the relevant views.
+            if (isWorkout && calendarPerson && event.persons && event.persons.includes(calendarPerson)) {
+                evItem.style.cursor = 'pointer';
+                evItem.addEventListener('click', () => {
+                    const newVal = !isCompleted;
+                    saveCompletion(eventWeek, event.name, calendarPerson, newVal);
+                    // Update dependent views
+                    renderCalendar();
+                    renderSchedule();
+                    renderProgress();
+                });
+            }
+            eventsDiv.appendChild(evItem);
+        });
+                td.appendChild(eventsDiv);
+                tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
+        }
+        table.appendChild(tbody);
+        container.appendChild(table);
+    }
+
+    // Render the progress view
+    function renderProgress() {
+        const progressDiv = document.getElementById('progress-container');
+        const completions = loadCompletions();
+        const notes = loadNotes();
+        progressDiv.innerHTML = '';
+        // Overall progress summary header
+        const summaryHeader = document.createElement('h2');
+        summaryHeader.textContent = 'Overview';
+        progressDiv.appendChild(summaryHeader);
+
+        // Compute and display aggregated progress across all weeks for each person
+        const overallContainer = document.createElement('div');
+        overallContainer.className = 'week';
+        // Title for the overall section
+        const overallTitle = document.createElement('h3');
+        overallTitle.textContent = 'Total progress';
+        overallContainer.appendChild(overallTitle);
+        // For each person, calculate total sessions and completed sessions,
+        // excluding swimming sessions ("Simpass") for everyone except Lily.
+        persons.forEach(person => {
+            let completed = 0;
+            let totalCount = 0;
+            schedule.forEach(weekObj => {
+                weekObj.sessions.forEach(sess => {
+                    // Count only workout sessions for this person
+                    if (!sess.name.startsWith('Workout')) return;
+                    if (sess.persons && !sess.persons.includes(person)) {
+                        return;
+                    }
+
+    // ---------------------------------------------------------------------
+    // New Planner implementation. This function overrides the previous
+    // renderSchedule() to provide a month-based planner with vertical week
+    // columns. Each column shows all activities for that week of the
+    // selected month. Users can switch months and persons via dropdowns,
+    // and edit activities directly by clicking on them. Progress per week
+    // and per person is displayed at the bottom of each column. This new
+    // implementation treats "Planner" as the successor of the former
+    // schedule view.
+    function renderSchedule() {
+        const container = document.getElementById('schedule-container');
+        const notes = loadNotes();
+        const completions = loadCompletions();
+        container.innerHTML = '';
+        const filterPerson = currentPerson;
+        // Header row: title, person switcher and month selector
+        const headerRow = document.createElement('div');
+        headerRow.className = 'schedule-header-row';
+        const heading = document.createElement('h2');
+        heading.style.marginBottom = '0';
+        heading.style.fontFamily = 'Roboto, Arial, sans-serif';
+        heading.style.fontSize = '22px';
+        heading.style.fontWeight = '500';
+        heading.style.color = getComputedStyle(document.documentElement).getPropertyValue('--secondary-color').trim();
+        heading.textContent = filterPerson ? Planner - ${filterPerson} : 'Planner';
+        headerRow.appendChild(heading);
+        // Person switcher
+        const switcher = document.createElement('div');
+        switcher.className = 'person-switcher';
+        const switchLabel = document.createElement('label');
+        switchLabel.textContent = 'Switch user:';
+        switcher.appendChild(switchLabel);
+        const switchSelect = document.createElement('select');
+        const optAll = document.createElement('option');
+        optAll.value = 'all';
+        optAll.textContent = 'All';
+        switchSelect.appendChild(optAll);
+        persons.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p;
+            opt.textContent = p;
+            switchSelect.appendChild(opt);
+        });
+        switchSelect.value = filterPerson || 'all';
+        switchSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (val === 'all') {
+                showGeneralSchedule();
+            } else {
+                showPersonSchedule(val);
+            }
+        });
+        switcher.appendChild(switchSelect);
+        headerRow.appendChild(switcher);
+        // Month selector
+        const monthWrapper = document.createElement('div');
+        monthWrapper.className = 'month-filter';
+        const monthLabel = document.createElement('label');
+        monthLabel.textContent = 'Select month:';
+        monthWrapper.appendChild(monthLabel);
+        const monthSelect = document.createElement('select');
+        const monthNamesFull = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        for (let m = 0; m < 12; m++) {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = monthNamesFull[m];
+            monthSelect.appendChild(opt);
+        }
+        monthSelect.value = plannerMonth;
+        monthSelect.addEventListener('change', (e) => {
+            plannerMonth = parseInt(e.target.value);
+            renderSchedule();
+        });
+        monthWrapper.appendChild(monthSelect);
+        headerRow.appendChild(monthWrapper);
+        container.appendChild(headerRow);
+        // Build list of events occurring in the selected month
+        const eventsList = [];
+        schedule.forEach(weekObj => {
+            weekObj.sessions.forEach(sess => {
+                if (sess.dateObj.getFullYear() === plannerYear && sess.dateObj.getMonth() === plannerMonth) {
+                    eventsList.push(sess);
+                }
+            });
+        });
+        // Determine unique ISO week numbers present in the month
+        const weekSet = new Set();
+        eventsList.forEach(ev => {
+            weekSet.add(getISOWeekNumber(ev.dateObj));
+        });
+        const weeksArray = Array.from(weekSet).sort((a,b) => a - b);
+        // Create planner grid container
+        const grid = document.createElement('div');
+        grid.className = 'planner-grid';
+        const dayShort = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        const monthAbbrev = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        weeksArray.forEach(weekNum => {
+            const weekDiv = document.createElement('div');
+            weekDiv.className = 'planner-week';
+            // Compute start and end dates for this ISO week
+            const weekStart = getDateOfISOWeek(weekNum, plannerYear);
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+            const rangeText = ${weekStart.getDate()} ${monthAbbrev[weekStart.getMonth()]} - ${weekEnd.getDate()} ${monthAbbrev[weekEnd.getMonth()]};
+            const weekHeader = document.createElement('h3');
+            weekHeader.textContent = rangeText;
+            weekDiv.appendChild(weekHeader);
+            // Filter events belonging to this week and the current person (if any)
+            const weekEvents = eventsList.filter(ev => {
+                return getISOWeekNumber(ev.dateObj) === weekNum && (!filterPerson || (ev.persons && ev.persons.includes(filterPerson)));
+            }).sort((a,b) => a.dateObj - b.dateObj);
+            // Compute progress counts
+            let totalWorkouts = 0;
+            let completedWorkouts = 0;
+            weekEvents.forEach(ev => {
+                if (ev.name && ev.name.startsWith('Workout')) {
+                    totalWorkouts++;
+                    if (filterPerson && completions[weekNum] && completions[weekNum][ev.name] && completions[weekNum][ev.name][filterPerson]) {
+                        completedWorkouts++;
+                    }
+                }
+            });
+            weekEvents.forEach(ev => {
+                const eventDiv = document.createElement('div');
+                eventDiv.className = 'planner-event';
+                // Date/day header
+                const dateHeader = document.createElement('div');
+                dateHeader.className = 'event-date';
+                const d = ev.dateObj;
+                dateHeader.textContent = ${dayShort[d.getDay()]} ${d.getDate()} ${monthAbbrev[d.getMonth()]};
+                eventDiv.appendChild(dateHeader);
+                // Name/time line
+                const nameLine = document.createElement('div');
+                nameLine.className = 'event-name';
+                const timePart = ev.datetime.split(' ')[1];
+                nameLine.textContent = ${timePart} - ${ev.name};
+                // Add completion symbol for workouts
+                if (ev.name && ev.name.startsWith('Workout')) {
+                    const status = document.createElement('span');
+                    status.style.float = 'right';
+                    if (filterPerson && completions[weekNum] && completions[weekNum][ev.name] && completions[weekNum][ev.name][filterPerson]) {
+                        status.textContent = '✓';
+                        status.style.color = getComputedStyle(document.documentElement).getPropertyValue('--success-color').trim();
+                    } else {
+                        status.textContent = '☐';
+                        const colorFor = filterPerson ? personColors[filterPerson] : getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim();
+                        status.style.color = colorFor;
+                    }
+                    nameLine.appendChild(status);
+                }
+                eventDiv.appendChild(nameLine);
+                // Click to edit the activity
+                eventDiv.addEventListener('click', () => {
+                    editEvent(ev);
+                });
+                weekDiv.appendChild(eventDiv);
+            });
+            // Progress summary line
+            if (weekEvents.length > 0) {
+                const prog = document.createElement('div');
+                prog.style.fontSize = '12px';
+                prog.style.marginTop = '0.5em';
+                prog.style.fontWeight = '600';
+                let progColor;
+                if (filterPerson) {
+                    prog.textContent = ${completedWorkouts}/${totalWorkouts} workouts done;
+                    progColor = personColors[filterPerson];
+                } else {
+                    // Aggregate counts across persons
+                    let totalAll = 0;
+                    let completedAll = 0;
+                    persons.forEach(p => {
+                        weekEvents.forEach(ev => {
+                            if (ev.name && ev.name.startsWith('Workout') && ev.persons && ev.persons.includes(p)) {
+                                totalAll++;
+                                if (completions[weekNum] && completions[weekNum][ev.name] && completions[weekNum][ev.name][p]) {
+                                    completedAll++;
+                                }
+                            }
+                        });
+                    });
+                    prog.textContent = ${completedAll}/${totalAll} workouts done;
+                    progColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim() || '#4285F4';
+                }
+                prog.style.color = progColor;
+                weekDiv.appendChild(prog);
+            }
+            grid.appendChild(weekDiv);
+        });
+        container.appendChild(grid);
+    }
+                    totalCount++;
+                    if (completions[weekObj.week][sess.name][person]) {
+                        completed++;
+                    }
+                });
+            });
+            const personRow = document.createElement('div');
+            personRow.className = 'person-progress-row';
+            const label = document.createElement('span');
+            label.textContent = ${person}: ${completed}/${totalCount} workouts done;
+            label.style.fontSize = '14px';
+            label.style.fontWeight = '600';
+            label.style.color = personColors[person];
+            personRow.appendChild(label);
+            // Progress bar container
+            const barContainer = document.createElement('div');
+            barContainer.className = 'person-progress-bar-container';
+            barContainer.style.background = personColors[person] + '20';
+            barContainer.style.borderRadius = '4px';
+            barContainer.style.height = '8px';
+            barContainer.style.marginTop = '0.3em';
+            barContainer.style.marginBottom = '0.5em';
+            const bar = document.createElement('div');
+            bar.style.background = personColors[person];
+            bar.style.height = '8px';
+            bar.style.width = totalCount > 0 ? ${(completed/totalCount)*100}% : '0%';
+            bar.style.borderRadius = '4px';
+            barContainer.appendChild(bar);
+            personRow.appendChild(barContainer);
+            overallContainer.appendChild(personRow);
+        });
+        progressDiv.appendChild(overallContainer);
+
+        // List progress per week and person
+        schedule.forEach(weekObj => {
+            const weekRow = document.createElement('div');
+            weekRow.className = 'week';
+            // Week title (ISO week number)
+            const weekTitle = document.createElement('h3');
+            weekTitle.textContent = Week ${weekObj.week};
+            weekRow.appendChild(weekTitle);
+            // Iterate over each person
+            persons.forEach(person => {
+                // Compute total and completed workout counts for this person during the week
+                let totalCount = 0;
+                let completedCount = 0;
+                weekObj.sessions.forEach(sess => {
+                    if (!sess.name.startsWith('Workout')) return;
+                    if (!Array.isArray(sess.persons) || !sess.persons.includes(person)) return;
+                    totalCount++;
+                    if (completions[weekObj.week][sess.name][person]) {
+                        completedCount++;
+                    }
+                });
+                const personRow = document.createElement('div');
+                personRow.className = 'person-progress-row';
+                // Label for person progress
+                const label = document.createElement('span');
+                label.textContent = ${person}: ${completedCount}/${totalCount} workouts done;
+                label.style.fontSize = '14px';
+                label.style.fontWeight = '600';
+                label.style.color = personColors[person];
+                personRow.appendChild(label);
+                // Progress bar container with subtle background
+                const barContainer = document.createElement('div');
+                barContainer.className = 'person-progress-bar-container';
+                barContainer.style.background = personColors[person] + '20';
+                barContainer.style.borderRadius = '4px';
+                barContainer.style.height = '8px';
+                barContainer.style.marginTop = '0.3em';
+                barContainer.style.marginBottom = '0.5em';
+                const bar = document.createElement('div');
+                bar.style.background = personColors[person];
+                bar.style.height = '8px';
+                bar.style.borderRadius = '4px';
+                bar.style.width = totalCount > 0 ? ${(completedCount/totalCount)*100}% : '0%';
+                barContainer.appendChild(bar);
+                personRow.appendChild(barContainer);
+                weekRow.appendChild(personRow);
+            });
+            // Aggregate notes summary (across persons) for the week
+            const notesCount = weekObj.sessions.filter(s => (notes[weekObj.week][s.name] || '').trim() !== '').length;
+            const notesInfo = document.createElement('p');
+            notesInfo.textContent = Notes recorded: ${notesCount}/${weekObj.sessions.length};
+            notesInfo.style.fontSize = '13px';
+            notesInfo.style.margin = '0';
+            notesInfo.style.color = '#666';
+            weekRow.appendChild(notesInfo);
+            progressDiv.appendChild(weekRow);
+        });
+    }
+
+    // Filter the displayed weeks based on dropdown selection
+    function filterSchedule() {
+        // Use the globally stored selectedWeekFilter instead of directly reading
+        // from the dropdown. This allows the default to be set programmatically.
+        const selected = selectedWeekFilter || 'all';
+        const weekDivs = document.querySelectorAll('#schedule-container .week');
+        weekDivs.forEach(div => {
+            const weekNumber = div.dataset.week;
+            if (selected === 'all' || weekNumber === selected) {
+                div.style.display = '';
+            } else {
+                div.style.display = 'none';
+            }
+        });
+    }
+
+    // Show either the schedule or progress page
+    function showPage(page) {
+        const homeContainer = document.getElementById('home-container');
+        const scheduleContainer = document.getElementById('schedule-container');
+        const progressContainer = document.getElementById('progress-container');
+        const calendarContainer = document.getElementById('calendar-container');
+        const todayInfo = document.getElementById('today-info');
+        const navHome = document.getElementById('nav-home');
+        const navSchedule = document.getElementById('nav-schedule');
+        const navProgress = document.getElementById('nav-progress');
+        const navCalendar = document.getElementById('nav-calendar');
+        // Manage the visibility of the main title depending on the page
+        const mainTitle = document.getElementById('main-title');
+        // Reset active states
+        navHome.classList.remove('active');
+        navSchedule.classList.remove('active');
+        navProgress.classList.remove('active');
+        if (navCalendar) navCalendar.classList.remove('active');
+        // Hide all containers and the date banner by default
+        homeContainer.style.display = 'none';
+        scheduleContainer.style.display = 'none';
+        progressContainer.style.display = 'none';
+        if (calendarContainer) calendarContainer.style.display = 'none';
+        if (todayInfo) {
+            todayInfo.style.display = 'none';
+        }
+        // Show the requested page and mark nav active
+        if (page === 'home') {
+            // Make the calendar the main view on the home page
+            // Hide the old home container and show only the calendar
+            homeContainer.style.display = 'none';
+            if (calendarContainer) {
+                calendarContainer.style.display = 'block';
+                // Render the calendar to keep it up to date
+                renderCalendar();
+            }
+            navHome.classList.add('active');
+            // Show the main title when on the home page
+            if (mainTitle) mainTitle.style.display = 'block';
+            // Date banner not needed on the home page
+            if (todayInfo) todayInfo.style.display = 'none';
+        } else if (page === 'schedule') {
+            scheduleContainer.style.display = 'block';
+            navSchedule.classList.add('active');
+            // Show the date banner only on the schedule page
+            if (todayInfo) {
+                todayInfo.style.display = 'block';
+            }
+            if (mainTitle) mainTitle.style.display = 'block';
+        } else if (page === 'calendar') {
+            if (calendarContainer) calendarContainer.style.display = 'block';
+            if (navCalendar) navCalendar.classList.add('active');
+            if (mainTitle) mainTitle.style.display = 'block';
+            // Hide the date banner on the calendar view
+            if (todayInfo) todayInfo.style.display = 'none';
+            // Render calendar whenever it is displayed
+            renderCalendar();
+        } else {
+            progressContainer.style.display = 'block';
+            navProgress.classList.add('active');
+            if (mainTitle) mainTitle.style.display = 'block';
+            // Refresh progress data on each display
+            renderProgress();
+        }
+    }
+
+    // Initial rendering
+    document.addEventListener('DOMContentLoaded', () => {
+        renderSchedule();
+        renderProgress();
+        // Show the home page by default
+        showPage('home');
+    });
+    </script>
 </body>
 </html>
